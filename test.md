@@ -12,7 +12,11 @@
 > cd test   
 > git init  
 
-![avatar](git_clone.PNG)
+
+![avatar](https://raw.githubusercontent.com/tingmwu/python_learn/master/imag/git_clone.PNG)
+
+
+![avatar](./imag/git_clone.PNG)
 
 ### git clone 
 
