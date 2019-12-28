@@ -1,2 +1,2 @@
 
-test
+print("hello the world!")
