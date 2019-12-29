@@ -1,0 +1,344 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"文件",
+				"文件名"
+			],
+			[
+				"git",
+				"git_clone.PNG"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "git_learn.md",
+			"settings":
+			{
+				"buffer_size": 1374,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "sublime_setting.md",
+			"settings":
+			{
+				"buffer_size": 651,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/python3.sublime-build",
+					""
+				],
+				[
+					"Packages/User/python3.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/python3.sublime-build",
+				"Run"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"LiveReload: Enable/disable plugins",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"LiveReload: Enable/disable plug-ins",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"mdp",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"Package Control: emove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"picp",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 157.0,
+		"history":
+		[
+			"git diff",
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/E/Users/TM/Desktop/pytohon_learn"
+	],
+	"file_history":
+	[
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/LiveReload/LiveReload.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/E/Users/TM/Desktop/pytohon_learn/git_learn.md",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/LiveReload.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/MarkdownEditing/Markdown (Standard).sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/MarkdownEditing/Markdown.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/MultiMarkdown.sublime-settings",
+		"/E/Users/TM/Desktop/pytohon_learn/hello.py",
+		"/E/Users/TM/Desktop/新建文件夹/python_learn/test.md",
+		"/E/Users/TM/Desktop/pytohon_learn/imag/Snipaste_2019-12-28_21-31-50.PNG",
+		"/E/Users/TM/Desktop/pytohon_learn/test.py",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/python3.sublime-build"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "git_learn.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1374,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								179,
+								179
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 78.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "sublime_setting.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 651,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								268,
+								268
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"parser": "markdown",
+							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax",
+							"tab_size": 4,
+							"target": "disk",
+							"translate_tabs_to_spaces": true,
+							"wrap_width": 0
+						},
+						"translation.x": 0.0,
+						"translation.y": 155.697478992,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 33.0
+	},
+	"input":
+	{
+		"height": 71.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 105.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/python3.sublime-build",
+	"project": "python_learn.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 195.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
