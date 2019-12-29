@@ -30,7 +30,7 @@
 
 > $ git add+文件名.文件类型
 
-*例如图中，我在文件夹里添加了一个test.txt，
+*例如，我在文件夹里添加了一个test.txt，
 也就是说我修改了test.txt，所以我在Git
 Bash中可以写git add test.txt 来添加我的修改记录。但是你发现上一条git
 add test.txt失败了，因为我在本地仓库中从没对这个进行我操作，所以没有修改记录，因此无法添加修改记录。*
@@ -39,8 +39,17 @@ add test.txt失败了，因为我在本地仓库中从没对这个进行我操�
 > git add -u    # 提交被修改和被删除的文件  
 > git add .     # 提交新文件和被修改的文件(**不包括被删除的文件**)
 
-### 链接远程仓库
+### git diff
+**查看文档变换**
+> git diff &emsp;# 查看所有文档变化<br>
+> git diff 文件名.文件类型   &emsp; # 查看某个文件的变化<br>   
+
+### cat 文件名.文件类型
+    查看该文件内容
+
+## 3. 链接远程仓库 
 [详细说明点这里](https://www.runoob.com/git/git-remote-repo.html)
+
 
 - 方式1 https地址
 > 优点：可以直接复制图中的地址进行连接  
