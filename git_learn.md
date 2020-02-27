@@ -57,7 +57,7 @@ add test.txt失败了，因为我在本地仓库中从没对这个进行我操�
 
 回到 github 上，进入 Account => Settings（账户配置）=> SSH and GPG keys => NEW SSH key。
 
-![avatar](./image/ssh.PNG)
+![avatar](./imag/ssh.PNG)
 
 
 - 方式1 https地址
