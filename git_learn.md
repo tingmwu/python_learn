@@ -49,7 +49,15 @@ add test.txt失败了，因为我在本地仓库中从没对这个进行我操�
 
 ## 3. 链接远程仓库 
 [详细说明点这里](https://www.runoob.com/git/git-remote-repo.html)
+由于你的本地 Git 仓库和 GitHub 仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息：
+使用以下命令生成 SSH Key：
+> ssh-keygen -t rsa -C "youremail@example.com"
 
+后面的 your_email@youremail.com 改为你在 Github 上注册的邮箱，之后会要求确认路径和输入密码，我们这使用默认的一路回车就行。成功的话会在 ~/ 下生成 .ssh 文件夹，进去，打开 id_rsa.pub，复制里面的 key。
+
+回到 github 上，进入 Account => Settings（账户配置）=> SSH and GPG keys => NEW SSH key。
+
+![avatar](./image/ssh.PNG)
 
 - 方式1 https地址
 > 优点：可以直接复制图中的地址进行连接  
@@ -82,3 +90,4 @@ eg:
 
      
 
+<!-- <meta http-equiv="refresh" content="5"> -->

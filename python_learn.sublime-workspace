@@ -4,6 +4,46 @@
 		"selected_items":
 		[
 			[
+				"tmp",
+				"tmp_html〔variable〕"
+			],
+			[
+				"sea",
+				"search_html〔variable〕"
+			],
+			[
+				"se",
+				"search_html〔variable〕"
+			],
+			[
+				"novel",
+				"novel_url〔variable〕"
+			],
+			[
+				"novel_",
+				"novel_url"
+			],
+			[
+				"cha",
+				"chapt_title〔variable〕"
+			],
+			[
+				"n",
+				"novel_title"
+			],
+			[
+				"chapt",
+				"chapt_url"
+			],
+			[
+				"no",
+				"novel_url"
+			],
+			[
+				"get",
+				"get_html"
+			],
+			[
 				"文件",
 				"文件名"
 			],
@@ -19,7 +59,7 @@
 			"file": "git_learn.md",
 			"settings":
 			{
-				"buffer_size": 1374,
+				"buffer_size": 1422,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -28,13 +68,44 @@
 			"file": "sublime_setting.md",
 			"settings":
 			{
-				"buffer_size": 651,
+				"buffer_size": 845,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "import re\nimport requests\nimport time\nimport random\n\n\nclass NovelSpider:\n    ''' 爬取全书网小说并下载'''\n    # 初始化\n\n    def __init__(self):\n        self.session = requests.session  # 下载器\n        self.novel_title = ''\n\n    def get_novel(self):  # 主逻辑\n        # 获取章节链接\n        chapt_urls = self.get_chapt_urls()\n\n        # 下载每个章节\n        self.down_chapt(chapt_urls)\n\n    # 获取html页面\n    def get_html(self, url):\n        headers = {'Accept': '*/*',\n                   'Accept-Language': 'en-US,en;q=0.8',\n                   'Cache-Control': 'max-age=0',\n                   'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36',\n                   'Connection': 'keep-alive',\n                   }\n        time.sleep(random.randint(1, 9))\n        try:\n            r = requests.get(url, headers=headers)\n            r.raise_for_status()\n            r.encoding = r.apparent_encoding\n            html = r.content.decode('gbk', 'ignore')\n        except:\n            print('访问失败')\n            return ''\n        return html\n\n    # 获取章节链接\n    def get_chapt_urls(self):\n        novel_url = input(\"请输入全书网书籍链接：\")\n        # 访问url\n        novel_data = self.get_html(novel_url)\n        # print(novel_data)\n        res = re.compile('<li><a href=\"(.*?)\" title=\"第.*?章.*?\">(.*?)</a></li>')\n        chapt_urls = re.findall(res, novel_data)\n        title_res = re.compile('content=\"如你喜欢小说(.*?)，那么请将')\n        global novel_title\n        novel_title = re.findall(title_res, novel_data)\n        # print(chapt_urls)\n        # print(novel_title)\n        return chapt_urls\n\n    def down_chapt(self, chapt_urls):\n        for url in chapt_urls:\n            # print(url)\n            chapt_url = url[0]\n            chapt_title = url[1]\n            # print(chapt_title)\n            # print(chapt_url)\n            chapt_html_content = self.get_html(chapt_url)\n            # print(chapt_html_content)\n            chapt_reg = re.compile(r'</script>&nbsp;&nbsp;&nbsp;&nbsp;(.*?)'\n                                   r'<script type=\"text/javascript\">', re.S)\n            chapt_content = re.findall(chapt_reg, chapt_html_content)\n            chapt_content = str(chapt_content[0])\n            chapt_content = chapt_content.replace('<br />', '')\n            chapt_content = chapt_content.replace('&nbsp;', '')\n            # 下载\n            print('正在下载 %s' % chapt_title)\n\n            with open('{}.txt'.format(novel_title[0]), 'a') as fp:\n                fp.write(chapt_title + '\\n')\n                fp.write(chapt_content + '\\n')\n\n\nif __name__ == \"__main__\":\n    demo = NovelSpider()\n    demo.get_novel()\n",
+			"file": "/E/py/get_novels.py",
+			"file_size": 2802,
+			"file_write_time": 132263888300092216,
+			"settings":
+			{
+				"buffer_size": 2618,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "from urllib.parse import quote\nimport requests\nimport re\n\n# def search_novel()\n\nkey = input('请输入搜索关键词：')\nkey_gbk = quote(key, encoding='gbk')\nsearch_url = \"http://www.quanshuwang.com/modules/article/search.php?searchkey={}&searchtype=articlename&searchbuttom.x=42&searchbuttom.y=21\".format(\n    key_gbk)\n\ntry:\n    search_html = requests.get(search_url).content.decode('gbk')\n    # print(search_html)\n\n    # res = re.compile('<a target=\"_blank\" href=\"(.*?)\" class=\"l mr10\">')\n    res = re.compile(\n        '<a target=\"_blank\" href=\"(.*?)\" class=\"l mr10\"><img  onerror=\"this.src=.*?\" src=\".*?\" alt=\"(.*?)\" width=\"120\" height=\"150\"></a>')\n\n    reg = re.findall(res, search_html)\n\n    print(\"查找到以下书籍:\" + '\\n')\n    tmp = 1\n    for i in reg:\n        print(\"[{}] {}\".format(tmp, i[1]))\n        tmp += 1\n    num = input(\"选择下载的书籍序号：\")\n    num = int(num) - 1\n    tmp_url = reg[num][0]\n\n    tmp_html = requests.get(tmp_url).content.decode('gbk')\n    res = re.compile('<a href=\"(.*?)\" class=\"reader\" title=\".*?\">开始阅读</a>')\n    reg = re.findall(res, tmp_html)\n    novel_url = reg[0]\nexcept:\n    print(\"搜索失败！\")\nprint(novel_url)\n",
+			"file": "/E/py/test/test.py",
+			"file_size": 1203,
+			"file_write_time": 132263954930875248,
+			"settings":
+			{
+				"buffer_size": 1114,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/E/Users/TM/Desktop/test.py",
+			"settings":
+			{
+				"buffer_size": 275,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
 	],
-	"build_system": "",
+	"build_system": "Packages/User/python3.sublime-build",
 	"build_system_choices":
 	[
 		[
@@ -78,12 +149,16 @@
 		"selected_items":
 		[
 			[
-				"Package Control: ",
+				"in",
 				"Package Control: Install Package"
 			],
 			[
 				"LiveReload: Enable/disable plugins",
 				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
 			],
 			[
 				"LiveReload: Enable/disable plug-ins",
@@ -121,6 +196,7 @@
 		"height": 157.0,
 		"history":
 		[
+			"pip list",
 			"git diff",
 			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
 		]
@@ -140,9 +216,32 @@
 	],
 	"file_history":
 	[
-		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/LiveReload/LiveReload.sublime-settings",
-		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/E/Users/TM/Desktop/test.py",
+		"/E/py/pachong/mood_spider/moodspider.py",
+		"/E/py/pachong/get_novel.py",
+		"/E/Users/TM/Desktop/index.m3u8",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/Anaconda/Default (Windows).sublime-keymap",
+		"/D/PROF/python3/lib/site-packages/requests/__init__.py",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Python.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Anaconda.sublime-settings",
+		"/E/py/test/get_novels.py",
+		"/E/Users/TM/Desktop/pytohon_learn/doc/Git 远程仓库(Github) _ 菜鸟教程_files/style.css",
+		"/E/Users/TM/Desktop/get_novels.py",
+		"/E/py/pachong/get_music.py",
+		"/E/py/pachong/spider.py",
+		"/E/Users/TM/Desktop/新建文件夹/KeyFile",
+		"/E/Users/TM/Desktop/KeyFile",
+		"/E/Users/TM/Desktop/杂事/爬取超星/test.py",
 		"/E/Users/TM/Desktop/pytohon_learn/git_learn.md",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/LiveReload/LiveReload.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Localization.sublime-settings",
+		"/E/Users/TM/Desktop/pytohon_learn/sublime_setting.md",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/Markdown Slideshow/Default.sublime-keymap",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/Markdown Slideshow/MarkdownSlideshow.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/MarkdownSlideshow.sublime-settings",
+		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/LiveReload.sublime-settings",
 		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/MarkdownEditing/Markdown (Standard).sublime-settings",
 		"/C/Users/tmdd/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
@@ -170,6 +269,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"print",
+			"html"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -187,7 +288,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -196,26 +297,28 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1374,
+						"buffer_size": 1422,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								179,
-								179
+								35,
+								35
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax"
+							"parser": "markdown",
+							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax",
+							"target": "browser"
 						},
 						"translation.x": 0.0,
-						"translation.y": 78.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -224,15 +327,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 651,
+						"buffer_size": 845,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								268,
-								268
+								124,
+								124
 							]
 						],
 						"settings":
@@ -242,11 +345,96 @@
 							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax",
 							"tab_size": 4,
 							"target": "disk",
-							"translate_tabs_to_spaces": true,
-							"wrap_width": 0
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 155.697478992,
+						"translation.y": 390.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/E/py/get_novels.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								239,
+								239
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/E/py/test/test.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1114,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								323,
+								323
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 66.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/E/Users/TM/Desktop/test.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 275,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								275,
+								275
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -288,11 +476,15 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 105.0
+		"height": 186.0
 	},
 	"output.find_results":
 	{
 		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 168.0
 	},
 	"pinned_build_system": "Packages/User/python3.sublime-build",
 	"project": "python_learn.sublime-project",
@@ -335,7 +527,7 @@
 	"show_minimap": true,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": false,
+	"side_bar_visible": true,
 	"side_bar_width": 195.0,
 	"status_bar_visible": true,
 	"template_settings":
