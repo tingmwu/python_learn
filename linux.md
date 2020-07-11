@@ -114,29 +114,44 @@ trusted-host=mirrors.aliyun.com
 
 # VS code通过SSH远程编辑服务器文件
 ## 1. 安装ssh环境
-> open ssh，win10可打开设置=>应用=>管理可选功能=>安装open sss客户端和服务器端
-    设置里找不到可[通过powershell安装](https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse)
+> 方法1：使用open ssh，win10可打开设置=>应用=>管理可选功能=>安装open sss客户端和服务器端
+（**设置里找不到可[通过powershell安装](https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse)**）
 
 > 或者如果有git自带ssh，那么直接使用git
 
 ## 2. 生成公钥
-> 1. 建立ssh信任(确认自己本机的公钥是否存在%USERPROFILE%\.ssh\id_rsa.pub,不存在就生成,命令是ssh-keygen -t rsa,然后传递给远程,ssh-copy-id username_on_host@host_ip)
 
-> 2. 打开Remote-SSH: Open Configuration File...,然后配置文件内容,例如
+### 1. 建立ssh信任(确认自己本机的公钥是否存在%USERPROFILE%\.ssh\id_rsa.pub,不存在就生成,命令是：
 
+> ssh-keygen -t rsa -P ''
+
+**加上-P ''的意思是设置一个空密码，也可以不加，不加的话要按三次回车**
+
+
+### 2. 然后把公钥id_rsa.pub的内容追加到服务器/home/.ssh/authorized_keys文件里。**这样做不用每次启动vscode都输入密码了**
+
+*公钥追加到服务器可以采用以下方式*
+> scp /root/.ssh/id_rsa.pub root@192.168.1.181:/root/.ssh/authorized_keys
+
+(**其中/root/.ssh/id_rsa.pub为你本地公钥路径；root为你的服务器用户名；192.168.1.181为你的服务器ip；**)
+
+### 3. authorized_keys的权限要是600!!!
+> chmod 600 /root/.ssh/authorized_keys
+
+## 3. vs code连接
+### 1. 安装Remote SSH插件
+
+### 2. 点击左下角一个对尖括号标志
+
+![avatar](./imag/Snipaste_2020-07-11_00-14-32.PNG)
+
+### 3. 打开Remote-SSH: Open Configuration File...,然后配置文件内容,例如
+```
 Host root
     HostName 47.97.221.121
     Port 22
     User root
-    IdentityFile C:\Users\tmdd\.ssh\id_rsa
+    IdentityFile C:\Users\%user%\.ssh\id_rsa
+```
 
-> 3. 然后把公钥id_rsa.pub的内容追加到服务器/home/.ssh/authorized_keys文件里。然后重启vscode就会发现无需在输入密码了
-
-## 3. vs code连接
-> 1. 安装Remote SSH插件
-
-> 2. 点击左下角一个对尖括号标志
-
-![avatar](./imag/Snipaste_2020-07-11_00-14-32.PNG)
-
-> 3. 选择connect host之后就可以操作了
+### 4. 选择connect host之后就可以操作了
