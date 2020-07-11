@@ -80,7 +80,7 @@ eg:
 3. 提交修改并上传
 > git add -A    # 增加修改  
 > git commit -m '你的备注信息' # 提交修改
-> 
+ 
 4. 进行同步
 
     > git push -u origin master
