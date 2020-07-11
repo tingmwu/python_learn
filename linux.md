@@ -8,6 +8,7 @@
 
 ### 1.阿里源
 
+```
 deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
 deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
 deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
@@ -25,9 +26,10 @@ deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
 deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
 deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
 deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
+```
 
 ### 2.东北大学
-
+```
 deb-src http://mirror.neu.edu.cn/ubuntu/ xenial main restricted #Added by software-properties
 
 deb http://mirror.neu.edu.cn/ubuntu/ xenial main restricted
@@ -59,9 +61,9 @@ deb-src http://mirror.neu.edu.cn/ubuntu/ xenial-security main restricted multive
 deb http://mirror.neu.edu.cn/ubuntu/ xenial-security universe
 
 deb http://mirror.neu.edu.cn/ubuntu/ xenial-security multiverse
-
+```
 ### 3.清华大学
-
+```
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted
 
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted
@@ -79,17 +81,17 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security universe deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security multiverse
-
+```
 ## pip更换国内源
 
 > *linux下 Linux下，修改 ~/.pip/pip.conf。*
-
+```
 [global]
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
 trusted-host=mirrors.aliyun.com
-
+```
 > *windows下，直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini。内容同上。*
 
 
