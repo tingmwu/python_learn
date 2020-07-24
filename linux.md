@@ -4,9 +4,9 @@
 
 > *修改 /etc/apt/sources.list 文件即可，将内容更换为任意一种国内源即可*
 
-*国内源*
+**国内源：**
 
-### 1.阿里源
+1.阿里源
 
 ```
 deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
@@ -28,7 +28,7 @@ deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
 deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
 ```
 
-### 2.东北大学
+2.东北大学
 ```
 deb-src http://mirror.neu.edu.cn/ubuntu/ xenial main restricted #Added by software-properties
 
@@ -62,7 +62,7 @@ deb http://mirror.neu.edu.cn/ubuntu/ xenial-security universe
 
 deb http://mirror.neu.edu.cn/ubuntu/ xenial-security multiverse
 ```
-### 3.清华大学
+3.清华大学
 ```
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted
 
@@ -111,6 +111,22 @@ trusted-host=mirrors.aliyun.com
 
 豆瓣：http://pypi.douban.com/simple/
 
+## conda换源
+```
+# 1. 设置
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+# 2. 生效
+conda config --set show_channel_urls yes
+```
+**其他源：**
+```
+# 1. 中科大
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+# 2.清华
+conda config --add https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+```
 
 # VS code通过SSH远程编辑服务器文件
 ## 1. 安装ssh环境
@@ -121,31 +137,31 @@ trusted-host=mirrors.aliyun.com
 
 ## 2. 生成公钥
 
-### 1. 建立ssh信任(确认自己本机的公钥是否存在%USERPROFILE%\.ssh\id_rsa.pub,不存在就生成,命令是：
+*1.建立ssh信任(确认自己本机的公钥是否存在%USERPROFILE%\.ssh\id_rsa.pub,不存在就生成,命令是：*
 
 > ssh-keygen -t rsa -P ''
 
 **加上-P ''的意思是设置一个空密码，也可以不加，不加的话要按三次回车**
 
 
-### 2. 然后把公钥id_rsa.pub的内容追加到服务器/home/.ssh/authorized_keys文件里。**这样做不用每次启动vscode都输入密码了**
+*2. 然后把公钥id_rsa.pub的内容追加到服务器/home/.ssh/authorized_keys文件里。**这样做不用每次启动vscode都输入密码了***
 
 *公钥追加到服务器可以采用以下方式*
 > scp /root/.ssh/id_rsa.pub root@192.168.1.181:/root/.ssh/authorized_keys
 
 (**其中/root/.ssh/id_rsa.pub为你本地公钥路径；root为你的服务器用户名；192.168.1.181为你的服务器ip；**)
 
-### 3. authorized_keys的权限要是600!!!
+*3. authorized_keys的权限要是600!!!*
 > chmod 600 /root/.ssh/authorized_keys
 
 ## 3. vs code连接
-### 1. 安装Remote SSH插件
+*1. 安装Remote SSH插件*
 
-### 2. 点击左下角一个对尖括号标志
+*2. 点击左下角一个对尖括号标志*
 
 ![avatar](./imag/Snipaste_2020-07-11_00-14-32.PNG)
 
-### 3. 打开Remote-SSH: Open Configuration File...,然后配置文件内容,例如
+*3. 打开Remote-SSH: Open Configuration File...,然后配置文件内容,例如*
 ```
 Host root
     HostName 47.97.221.121
@@ -154,4 +170,4 @@ Host root
     IdentityFile C:\Users\%user%\.ssh\id_rsa
 ```
 
-### 4. 选择connect host之后就可以操作了
+*4. 选择connect host之后就可以操作了*
