@@ -1,4 +1,4 @@
-utocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
 """""""""""""""""""""""""""""""""""
 """=>全局配置<="""
