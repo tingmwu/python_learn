@@ -111,15 +111,27 @@ trusted-host=mirrors.aliyun.com
 
 豆瓣：http://pypi.douban.com/simple/
 
-## conda换源
+## 安装Anaconda后设置
+```sh
+export PATH=~/anaconda3/bin:$PATH
+source ~/.bashrc
 ```
+## conda换源
+```sh
 # 1. 设置
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 # 2. 生效
 conda config --set show_channel_urls yes
 ```
-**其他源：**
+
+## 设置conda默认环境
+```sh
+vim ~/.bashrc
+在文件末尾添加 source activate myenv 
 ```
+
+**其他源：**
+```sh
 # 1. 中科大
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
@@ -171,3 +183,18 @@ Host root
 ```
 
 *4. 选择connect host之后就可以操作了*
+
+# 问题总结
+## 1. Git clone 速度过慢解决办法
+
+### 使用github的镜像网站进行访问
+> github.com.**cnpmjs**.org，我们将原本的网站中的github.com 进行替换。
+>
+> 例如上例子中替换为https://github.com.cnpmjs.org/graykode/nlp-tutorial
+
+## 2. Debian安装miniconda后出现CondaHTTPError: HTTP 000 CONNECTION FAILED
+[原文](https://github.com/conda/conda/issues/9948)
+> 解决办法：更换miniconda安装版本为**4.7.12**(*开始使用版本为4.8.3*)
+
+
+

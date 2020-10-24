@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>git 使用</title>
+        <style>
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="git-使用">git 使用</h1>
+<p><em>学习git的基本使用</em></p>
+<h2 id="1-创建仓库">1. 创建仓库</h2>
+<h3 id="方式-1-git-init">方式 1 git init</h3>
+<p><em>任意建立一个文件夹，右键git bash, 输入git init将会在创建当前文件夹为一个本地git仓库</em></p>
+<blockquote>
+<p>$ mkdir test<br>
+$ cd test<br>
+$ git init</p>
+</blockquote>
+<h3 id="方式-2-git-clone">方式 2 git clone</h3>
+<p><em>直接将git仓库中的在线仓库克隆到本地</em></p>
+<blockquote>
+<p>$ git clone xxxxx</p>
+</blockquote>
+<p><em>xxxxx是你在仓库复制的链接，如下图所示</em></p>
+<p><img src="file:///d:\TM\OneDrive\资料\pytohon_learn\imag\git_clone.PNG" alt="avatar"></p>
+<h2 id="2-本地库基本操作">2. 本地库基本操作</h2>
+<h3 id="git-add">git add</h3>
+<blockquote>
+<p>$ git add+文件名.文件类型</p>
+</blockquote>
+<p><em>例如，我在文件夹里添加了一个test.txt，
+也就是说我修改了test.txt，所以我在Git
+Bash中可以写git add test.txt 来添加我的修改记录。但是你发现上一条git
+add test.txt失败了，因为我在本地仓库中从没对这个进行我操作，所以没有修改记录，因此无法添加修改记录。</em></p>
+<blockquote>
+<p>git add -A    # 提交所有变换<br>
+git add -u    # 提交被修改和被删除的文件<br>
+git add .     # 提交新文件和被修改的文件(<strong>不包括被删除的文件</strong>)</p>
+</blockquote>
+<h3 id="git-diff">git diff</h3>
+<p><strong>查看文档变换</strong></p>
+<blockquote>
+<p>git diff  # 查看所有文档变化<br>
+git diff 文件名.文件类型     # 查看某个文件的变化<br></p>
+</blockquote>
+<h3 id="cat-文件名文件类型">cat 文件名.文件类型</h3>
+<pre><code>查看该文件内容
+</code></pre>
+<h2 id="3-链接远程仓库">3. 链接远程仓库</h2>
+<p><a href="https://www.runoob.com/git/git-remote-repo.html">详细说明点这里</a>
+由于你的本地 Git 仓库和 GitHub 仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息：
+使用以下命令生成 SSH Key：</p>
+<blockquote>
+<p>ssh-keygen -t rsa -C &quot;<a href="mailto:youremail@example.com">youremail@example.com</a>&quot;</p>
+</blockquote>
+<p>后面的 <a href="mailto:your_email@youremail.com">your_email@youremail.com</a> 改为你在 Github 上注册的邮箱，之后会要求确认路径和输入密码，我们这使用默认的一路回车就行。成功的话会在 ~/ 下生成 .ssh 文件夹，进去，打开 id_rsa.pub，复制里面的 key。</p>
+<p>回到 github 上，进入 Account =&gt; Settings（账户配置）=&gt; SSH and GPG keys =&gt; NEW SSH key。</p>
+<p><img src="file:///d:\TM\OneDrive\资料\pytohon_learn\imag\ssh.PNG" alt="avatar"></p>
+<ul>
+<li>方式1 https地址</li>
+</ul>
+<blockquote>
+<p>优点：可以直接复制图中的地址进行连接<br>
+缺点： 每次连接都需要登录自己的github账号</p>
+</blockquote>
+<ul>
+<li>方式2 ssh地址</li>
+</ul>
+<blockquote>
+<p>优点：只需登录一次<br>
+缺点： 须在本地和git仓库进行配置</p>
+</blockquote>
+<p><strong>具体步骤</strong></p>
+<ol>
+<li>链接远程仓库</li>
+</ol>
+<blockquote>
+<p>git remote add [shortname] [url]<br>
+eg:
+git remote add origin <a href="mailto:git@github.com">git@github.com</a>:tingmwu/python_learn.git</p>
+</blockquote>
+<ol start="2">
+<li>查看远程库</li>
+</ol>
+<blockquote>
+<p>git remote -v</p>
+</blockquote>
+<ol start="3">
+<li>提交修改并上传</li>
+</ol>
+<blockquote>
+<p>git add -A    # 增加修改<br>
+git commit -m '你的备注信息' # 提交修改</p>
+</blockquote>
+<ol start="4">
+<li>进行同步</li>
+</ol>
+<blockquote>
+<p>git push -u origin master</p>
+</blockquote>
+<pre><code>*由于远程库是空的，我们第一次推送master分支时，加上了 –u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令，只输入（如下）就OK。*
+</code></pre>
+<blockquote>
+<p>git push origin master</p>
+</blockquote>
+<!-- <meta http-equiv="refresh" content="5"> -->
+    </body>
+    </html>

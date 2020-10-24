@@ -6,4 +6,5 @@ url = 'https://www.zhihu.com/question/37661639'
 print("hello the world!")
 
 print("hello the world")
+input()
 # print(r.text)

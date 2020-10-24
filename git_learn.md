@@ -83,11 +83,11 @@ eg:
  
 4. 进行同步
 
-    > git push -u origin master
+> git push -u origin master
 
     *由于远程库是空的，我们第一次推送master分支时，加上了 –u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令，只输入（如下）就OK。*
 
-    > git push origin master
+> git push origin master
 
      
 
