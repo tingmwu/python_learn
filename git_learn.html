@@ -2,7 +2,7 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>git 使用</title>
+        <title>git &#x4F7F;&#x7528;</title>
         <style>
 </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
@@ -23,7 +23,7 @@
         <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
         
     </head>
-    <body class="vscode-light">
+    <body class="vscode-body vscode-light">
         <h1 id="git-使用">git 使用</h1>
 <p><em>学习git的基本使用</em></p>
 <h2 id="1-创建仓库">1. 创建仓库</h2>
@@ -64,6 +64,38 @@ git diff 文件名.文件类型     # 查看某个文件的变化<br></p>
 <h3 id="cat-文件名文件类型">cat 文件名.文件类型</h3>
 <pre><code>查看该文件内容
 </code></pre>
+<h3 id="git-reset---soft-head或者版本号">git reset --soft HEAD^(或者版本号)</h3>
+<pre><code><code><div>首先使用 git log 查看版本号 
+如果输出太多 可以使用 git log --pretty=oneline
+
+HEAD^的意思是上一个版本，也可以写成HEAD~1
+如果你进行了2次commit，想都撤回，可以使用HEAD~2
+
+--mixed 
+意思是：不删除工作空间改动代码，撤销commit，并且撤销git add . 操作
+这个为默认参数,git reset --mixed HEAD^ 和 git reset HEAD^ 效果是一样的。
+ 
+--soft  
+不删除工作空间改动代码，撤销commit，不撤销git add . 
+ 
+--hard
+删除工作空间改动代码，撤销commit，撤销git add . 
+
+注意完成这个操作后，就恢复到了上一次的commit状态。
+
+顺便说一下，如果commit注释写错了，只是想改一下注释，只需要：
+git commit --amend
+
+此时会进入默认vim编辑器，修改注释完毕后保存就好了
+</div></code></code></pre>
+<p><strong>回退后要返回最新版本</strong></p>
+<blockquote>
+<p>git reset --hard 最新版本的版本号</p>
+</blockquote>
+<p><em>如何已经关闭了命令行窗口，无法查看之前git log的版本号</em></p>
+<blockquote>
+<p>git reflog # 查看之前的提交和回退记录</p>
+</blockquote>
 <h2 id="3-链接远程仓库">3. 链接远程仓库</h2>
 <p><a href="https://www.runoob.com/git/git-remote-repo.html">详细说明点这里</a>
 由于你的本地 Git 仓库和 GitHub 仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息：
@@ -122,5 +154,18 @@ git commit -m '你的备注信息' # 提交修改</p>
 <p>git push origin master</p>
 </blockquote>
 <!-- <meta http-equiv="refresh" content="5"> -->
+<h2 id="4-git同时推送多个远程仓库">4. git同时推送多个远程仓库</h2>
+<h3 id="方法1">方法1</h3>
+<blockquote>
+<p>git remote set-url --add origin <a href="https://github.com/demo.git(%E6%96%B0%E5%A2%9E%E7%9A%84%E8%BF%9C%E7%A8%8B%E5%BA%93%E9%93%BE%E6%8E%A5)">https://github.com/demo.git(新增的远程库链接)</a></p>
+</blockquote>
+<h3 id="方法2">方法2</h3>
+<p><strong>修改.git/config</strong></p>
+<pre><code class="language-bash"><div>[remote <span class="hljs-string">&quot;origin&quot;</span>]
+	url = git@gitee.com:tingmwu/gray-segment.git
+    url = 新的远程库链接
+	fetch = +refs/heads/*:refs/remotes/origin/*
+</div></code></pre>
+
     </body>
     </html>
