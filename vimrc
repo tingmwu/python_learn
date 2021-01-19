@@ -197,7 +197,7 @@ set encoding=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 
 "设置文件编码"
-set fileencodings=utf-8
+set fileencoding=utf-8
 
 "设置终端编码"
 set termencoding=utf-8

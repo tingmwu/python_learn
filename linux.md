@@ -85,13 +85,18 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security universe deb htt
 ## pip更换国内源
 
 > *linux下 Linux下，修改 ~/.pip/pip.conf。*
-```
+```sh
 [global]
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
 trusted-host=mirrors.aliyun.com
+
+# 或者
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+
+
 > *windows下，直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini。内容同上。*
 
 
@@ -112,25 +117,34 @@ trusted-host=mirrors.aliyun.com
 豆瓣：http://pypi.douban.com/simple/
 
 ## 安装Anaconda后设置
+**1. 设置环境变量**
+
+*linux下*
 ```sh
-export PATH=~/anaconda3/bin:$PATH
-source ~/.bashrc
+vim ~/.bashrc # 当前用户生效
+vim /etc/profile # 所有用户生效
+
+export PATH=~/anaconda3/bin:$PATH  # 添加到文件末尾
+
+source ~/.bashrc # 使环境变量生效
 ```
-## conda换源
+
+*Windows下*
+```
+添加以下路径到环境变量(你安装anaconda的路径)
+D:\Anaconda3
+D:\Anaconda3\Scripts
+D:\Anaconda3\Library\bin
+```
+
+**2. conda换源**
 ```sh
-# 1. 设置
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-# 2. 生效
+
 conda config --set show_channel_urls yes
 ```
 
-## 设置conda默认环境
-```sh
-vim ~/.bashrc
-在文件末尾添加 source activate myenv 
-```
-
-**其他源：**
+*其他源：*
 ```sh
 # 1. 中科大
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
@@ -139,6 +153,14 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --add https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 ```
+
+**3. 设置conda默认环境**(不是必须)
+```sh
+vim ~/.bashrc
+在文件末尾添加 source activate myenv 
+```
+
+
 
 # VS code通过SSH远程编辑服务器文件
 ## 1. 安装ssh环境
@@ -196,6 +218,7 @@ Host root
 [原文](https://github.com/conda/conda/issues/9948)
 > 解决办法：更换miniconda安装版本为**4.7.12**(*开始使用版本为4.8.3*)
 
+*ps: 安装anaconda后想更换安装路径，需要修改anaconda3/bin/conda中的内容*
 ## 3. sudo: unable to resolve host xxxxx
 
 > sudo vi /etc/hosts
@@ -220,4 +243,78 @@ youuser ALL=(ALL) NOPASSWD: ALL
 第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
 第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
 ```
+
+## 5 执行sudo apt-get update报错
+**1. 换源**
+```
+这是因为镜像源除出了问题，一般都会推荐使用国内的镜像源，比如163或者阿里云或者清华大学的镜像服务器 （强烈建议使用清华镜像）
+
+清华镜像源官网：https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+
+将镜像源文本添加到/etc/apt/sources.list文件里
+```
+**2. 仍然报错，更换DNS**
+> sudo vi /etc/resolv.conf
+
+在其中添加：
+```
+nameserver 127.0.1.1
+#这里用的是阿里云的DNS服务器
+nameserver 223.5.5.5  
+nameserver 223.6.6.6
+```
+
+**3. WSL重启后，设置的DNS失效**
+> sudo vim /etc/wsl.conf
+
+*添加以下内容*
+```sh
+[network]
+generateResolvConf = false
+```
+
+*重新启动wsl*
+> wsl -d “your wsl name”
+
+*再修改/etc/resolv.conf*
+
+[参考文章：wsl手動設置dns不被重置為默認](https://www.ucamc.com/e-learning/computer-skills/421-wsl%E6%89%8B%E5%8B%95%E8%A8%AD%E7%BD%AEdns%E4%B8%8D%E8%A2%AB%E9%87%8D%E7%BD%AE%E7%82%BA%E9%BB%98%E8%AA%8D)
+
+## 6. ssh问题总结
+### 1. ssh连接出现Permission denied, please try again.
+*进入被连主机的/etc/ssh/sshd_config这个文件*
+> vi /etc/ssh/sshd_config
+
+*找到 **PermitRootLogin prohibit-password**，改为 **PermitRootLogin yes***
+
+*重启 ssh 服务：*
+> /etc/init.d/ssh restart
+
+### 2. ssh连接掉线
+修改C:\ProgramData\ssh\sshd_config文件sshd_config
+> ClientAliveInterval 30 # 30s给客户端发送一次心跳
+
+> ClientAliveCountMax 3  # 此客户端没有返回心跳，断开连接
+
+**Reference**<br>
+[(20200328已解决)ssh经常掉线](https://blog.csdn.net/The_Time_Runner/article/details/105210287)
+
+### 3. windows添加authorized_keys无效
+1) 添加authorized_keys到c盘用户下的.ssh;
+2) 修改C:\ProgramData\ssh\sshd_config文件，注释最后两行保存；
+    ```
+    #Match Group administrators
+    #       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+    ```
+3) 重启sshd服务。
+
+### 4. 修改windows的ssh默认shell为powershell
+    在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
+    
+或者以管理员身份启动 PowerShell，然后执行下面的命令完成注册表项的添加：
+> New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
+
+**Reference**<br>
+[Windows 支持OpenSSH 了！ - sparkdev](https://www.cnblogs.com/sparkdev/p/10166061.html)
+
 

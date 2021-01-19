@@ -1,37 +1,378 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>linux学习</title>
-        <style>
-</style>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<html>
+<head>
+<title>linux.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
 <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        </style>
-        <style>
-.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
 </style>
-        
-        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
-        
-    </head>
-    <body class="vscode-light">
-        <h1 id="linux学习">linux学习</h1>
-<h2 id="apt-更换国内源">apt 更换国内源</h2>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="linux%E5%AD%A6%E4%B9%A0">linux学习</h1>
+<h2 id="apt-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90">apt 更换国内源</h2>
 <blockquote>
 <p><em>修改 /etc/apt/sources.list 文件即可，将内容更换为任意一种国内源即可</em></p>
 </blockquote>
 <p><strong>国内源：</strong></p>
 <p>1.阿里源</p>
-<pre><code><code><div>deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
+<pre class="hljs"><code><div>deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
 deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
 deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
 deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted
@@ -48,9 +389,9 @@ deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
 deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
 deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
 deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
-</div></code></code></pre>
+</div></code></pre>
 <p>2.东北大学</p>
-<pre><code><code><div>deb-src http://mirror.neu.edu.cn/ubuntu/ xenial main restricted #Added by software-properties
+<pre class="hljs"><code><div>deb-src http://mirror.neu.edu.cn/ubuntu/ xenial main restricted #Added by software-properties
 
 deb http://mirror.neu.edu.cn/ubuntu/ xenial main restricted
 
@@ -81,9 +422,9 @@ deb-src http://mirror.neu.edu.cn/ubuntu/ xenial-security main restricted multive
 deb http://mirror.neu.edu.cn/ubuntu/ xenial-security universe
 
 deb http://mirror.neu.edu.cn/ubuntu/ xenial-security multiverse
-</div></code></code></pre>
+</div></code></pre>
 <p>3.清华大学</p>
-<pre><code><code><div>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted
+<pre class="hljs"><code><div>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted
 
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted
 
@@ -100,54 +441,68 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 
 deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security universe deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security multiverse
-</div></code></code></pre>
-<h2 id="pip更换国内源">pip更换国内源</h2>
+</div></code></pre>
+<h2 id="pip%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90">pip更换国内源</h2>
 <blockquote>
 <p><em>linux下 Linux下，修改 ~/.pip/pip.conf。</em></p>
 </blockquote>
-<pre><code><code><div>[global]
+<pre class="hljs"><code><div>[global]
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
 trusted-host=mirrors.aliyun.com
-</div></code></code></pre>
+
+<span class="hljs-comment"># 或者</span>
+pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</div></code></pre>
 <blockquote>
 <p><em>windows下，直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini。内容同上。</em></p>
 </blockquote>
 <blockquote>
-<p>临时使用 ， pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> package</p>
+<p>临时使用 ， pip install -i https://pypi.tuna.tsinghua.edu.cn/simple package</p>
 </blockquote>
 <p><em>其他国内源</em>
-清华：<a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
-<p>阿里云：<a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a></p>
-<p>中国科技大学 <a href="https://pypi.mirrors.ustc.edu.cn/simple/">https://pypi.mirrors.ustc.edu.cn/simple/</a></p>
-<p>华中理工大学：<a href="http://pypi.hustunique.com/">http://pypi.hustunique.com/</a></p>
-<p>山东理工大学：<a href="http://pypi.sdutlinux.org/">http://pypi.sdutlinux.org/</a></p>
-<p>豆瓣：<a href="http://pypi.douban.com/simple/">http://pypi.douban.com/simple/</a></p>
-<h2 id="安装anaconda后设置">安装Anaconda后设置</h2>
-<pre><code class="language-sh"><div><span class="hljs-built_in">export</span> PATH=~/anaconda3/bin:<span class="hljs-variable">$PATH</span>
-<span class="hljs-built_in">source</span> ~/.bashrc
+清华：https://pypi.tuna.tsinghua.edu.cn/simple</p>
+<p>阿里云：http://mirrors.aliyun.com/pypi/simple/</p>
+<p>中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/</p>
+<p>华中理工大学：http://pypi.hustunique.com/</p>
+<p>山东理工大学：http://pypi.sdutlinux.org/</p>
+<p>豆瓣：http://pypi.douban.com/simple/</p>
+<h2 id="%E5%AE%89%E8%A3%85anaconda%E5%90%8E%E8%AE%BE%E7%BD%AE">安装Anaconda后设置</h2>
+<p><strong>1. 设置环境变量</strong></p>
+<p><em>linux下</em></p>
+<pre class="hljs"><code><div>vim ~/.bashrc <span class="hljs-comment"># 当前用户生效</span>
+vim /etc/profile <span class="hljs-comment"># 所有用户生效</span>
+
+<span class="hljs-built_in">export</span> PATH=~/anaconda3/bin:<span class="hljs-variable">$PATH</span>  <span class="hljs-comment"># 添加到文件末尾</span>
+
+<span class="hljs-built_in">source</span> ~/.bashrc <span class="hljs-comment"># 使环境变量生效</span>
 </div></code></pre>
-<h2 id="conda换源">conda换源</h2>
-<pre><code class="language-sh"><div><span class="hljs-comment"># 1. 设置</span>
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-<span class="hljs-comment"># 2. 生效</span>
+<p><em>Windows下</em></p>
+<pre class="hljs"><code><div>添加以下路径到环境变量(你安装anaconda的路径)
+D:\Anaconda3
+D:\Anaconda3\Scripts
+D:\Anaconda3\Library\bin
+</div></code></pre>
+<p><strong>2. conda换源</strong></p>
+<pre class="hljs"><code><div>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+
 conda config --<span class="hljs-built_in">set</span> show_channel_urls yes
 </div></code></pre>
-<h2 id="设置conda默认环境">设置conda默认环境</h2>
-<pre><code class="language-sh"><div>vim ~/.bashrc
-在文件末尾添加 <span class="hljs-built_in">source</span> activate myenv 
-</div></code></pre>
-<p><strong>其他源：</strong></p>
-<pre><code class="language-sh"><div><span class="hljs-comment"># 1. 中科大</span>
+<p><em>其他源：</em></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># 1. 中科大</span>
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 <span class="hljs-comment"># 2.清华</span>
 conda config --add https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 </div></code></pre>
-<h1 id="vs-code通过ssh远程编辑服务器文件">VS code通过SSH远程编辑服务器文件</h1>
-<h2 id="1-安装ssh环境">1. 安装ssh环境</h2>
+<p><strong>3. 设置conda默认环境</strong>(不是必须)</p>
+<pre class="hljs"><code><div>vim ~/.bashrc
+在文件末尾添加 <span class="hljs-built_in">source</span> activate myenv 
+</div></code></pre>
+<h1 id="vs-code%E9%80%9A%E8%BF%87ssh%E8%BF%9C%E7%A8%8B%E7%BC%96%E8%BE%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%87%E4%BB%B6">VS code通过SSH远程编辑服务器文件</h1>
+<h2 id="1-%E5%AE%89%E8%A3%85ssh%E7%8E%AF%E5%A2%83">1. 安装ssh环境</h2>
 <blockquote>
 <p>方法1：使用open ssh，win10可打开设置=&gt;应用=&gt;管理可选功能=&gt;安装open sss客户端和服务器端
 （<strong>设置里找不到可<a href="https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse">通过powershell安装</a></strong>）</p>
@@ -155,7 +510,7 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
 <blockquote>
 <p>或者如果有git自带ssh，那么直接使用git</p>
 </blockquote>
-<h2 id="2-生成公钥">2. 生成公钥</h2>
+<h2 id="2-%E7%94%9F%E6%88%90%E5%85%AC%E9%92%A5">2. 生成公钥</h2>
 <p><em>1.建立ssh信任(确认自己本机的公钥是否存在%USERPROFILE%.ssh\id_rsa.pub,不存在就生成,命令是：</em></p>
 <blockquote>
 <p>ssh-keygen -t rsa -P ''</p>
@@ -164,50 +519,51 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
 <p><em>2. 然后把公钥id_rsa.pub的内容追加到服务器/home/.ssh/authorized_keys文件里。<strong>这样做不用每次启动vscode都输入密码了</strong></em></p>
 <p><em>公钥追加到服务器可以采用以下方式</em></p>
 <blockquote>
-<p>scp /root/.ssh/id_rsa.pub <a href="mailto:root@192.168.1.181">root@192.168.1.181</a>:/root/.ssh/authorized_keys</p>
+<p>scp /root/.ssh/id_rsa.pub root@192.168.1.181:/root/.ssh/authorized_keys</p>
 </blockquote>
 <p>(<strong>其中/root/.ssh/id_rsa.pub为你本地公钥路径；root为你的服务器用户名；192.168.1.181为你的服务器ip；</strong>)</p>
 <p><em>3. authorized_keys的权限要是600!!!</em></p>
 <blockquote>
 <p>chmod 600 /root/.ssh/authorized_keys</p>
 </blockquote>
-<h2 id="3-vs-code连接">3. vs code连接</h2>
+<h2 id="3-vs-code%E8%BF%9E%E6%8E%A5">3. vs code连接</h2>
 <p><em>1. 安装Remote SSH插件</em></p>
 <p><em>2. 点击左下角一个对尖括号标志</em></p>
-<p><img src="file:///d:\TM\OneDrive\资料\pytohon_learn\imag\Snipaste_2020-07-11_00-14-32.PNG" alt="avatar"></p>
+<p><img src="./imag/Snipaste_2020-07-11_00-14-32.PNG" alt="avatar"></p>
 <p><em>3. 打开Remote-SSH: Open Configuration File...,然后配置文件内容,例如</em></p>
-<pre><code><code><div>Host root
+<pre class="hljs"><code><div>Host root
     HostName 47.97.221.121
     Port 22
     User root
     IdentityFile C:\Users\%user%\.ssh\id_rsa
-</div></code></code></pre>
+</div></code></pre>
 <p><em>4. 选择connect host之后就可以操作了</em></p>
-<h1 id="问题总结">问题总结</h1>
-<h2 id="1-git-clone-速度过慢解决办法">1. Git clone 速度过慢解决办法</h2>
-<h3 id="使用github的镜像网站进行访问">使用github的镜像网站进行访问</h3>
+<h1 id="%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93">问题总结</h1>
+<h2 id="1-git-clone-%E9%80%9F%E5%BA%A6%E8%BF%87%E6%85%A2%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">1. Git clone 速度过慢解决办法</h2>
+<h3 id="%E4%BD%BF%E7%94%A8github%E7%9A%84%E9%95%9C%E5%83%8F%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E8%AE%BF%E9%97%AE">使用github的镜像网站进行访问</h3>
 <blockquote>
-<p><a href="http://github.com">github.com</a>.<strong>cnpmjs</strong>.org，<a href="http://xn--github-9v7i14cmxwt8ufgphoo860cba747n70q.com">我们将原本的网站中的github.com</a> 进行替换。</p>
+<p>github.com.<strong>cnpmjs</strong>.org，我们将原本的网站中的github.com 进行替换。</p>
 <p>例如上例子中替换为https://github.com.cnpmjs.org/graykode/nlp-tutorial</p>
 </blockquote>
-<h2 id="2-debian安装miniconda后出现condahttperror-http-000-connection-failed">2. Debian安装miniconda后出现CondaHTTPError: HTTP 000 CONNECTION FAILED</h2>
+<h2 id="2-debian%E5%AE%89%E8%A3%85miniconda%E5%90%8E%E5%87%BA%E7%8E%B0condahttperror-http-000-connection-failed">2. Debian安装miniconda后出现CondaHTTPError: HTTP 000 CONNECTION FAILED</h2>
 <p><a href="https://github.com/conda/conda/issues/9948">原文</a></p>
 <blockquote>
 <p>解决办法：更换miniconda安装版本为<strong>4.7.12</strong>(<em>开始使用版本为4.8.3</em>)</p>
 </blockquote>
+<p><em>ps: 安装anaconda后想更换安装路径，需要修改anaconda3/bin/conda中的内容</em></p>
 <h2 id="3-sudo-unable-to-resolve-host-xxxxx">3. sudo: unable to resolve host xxxxx</h2>
 <blockquote>
 <p>sudo vi /etc/hosts</p>
 </blockquote>
 <p>将<strong>127.0.0.1 localhost</strong> 改为 <strong>127.0.0.1 localhost xxxx</strong>(你的主机名)</p>
 <p><em>ps:修改主机名 <strong>vi /etc/hostname</strong> 然后 <strong>sudo reboot</strong></em></p>
-<h2 id="4-linux下sudo更改文件权限报错xxxis-not-in-the-sudoers-file-this-incident-will-be-reported">4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported</h2>
+<h2 id="4-linux%E4%B8%8Bsudo%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%8A%A5%E9%94%99xxxis-not-in-the-sudoers-file-this-incident-will-be-reported">4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported</h2>
 <blockquote>
 <p>sudo chmod 600 /etc/sudoers</p>
 <p>sudo vi /etc/sudoers
 在 <strong>root ALL=(ALL) ALL</strong> 下添加 <strong>xxx ALL=(ALL) ALL</strong></p>
 </blockquote>
-<pre><code><code><div>youuser ALL=(ALL) ALL
+<pre class="hljs"><code><div>youuser ALL=(ALL) ALL
 %youuser ALL=(ALL) ALL
 youuser ALL=(ALL) NOPASSWD: ALL
 %youuser ALL=(ALL) NOPASSWD: ALL
@@ -216,7 +572,78 @@ youuser ALL=(ALL) NOPASSWD: ALL
 第二行:允许用户组youuser里面的用户执行sudo命令(需要输入密码).
 第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
 第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
-</div></code></code></pre>
+</div></code></pre>
+<h2 id="5-%E6%89%A7%E8%A1%8Csudo-apt-get-update%E6%8A%A5%E9%94%99">5 执行sudo apt-get update报错</h2>
+<p><strong>1. 换源</strong></p>
+<pre class="hljs"><code><div>这是因为镜像源除出了问题，一般都会推荐使用国内的镜像源，比如163或者阿里云或者清华大学的镜像服务器 （强烈建议使用清华镜像）
 
-    </body>
-    </html>
+清华镜像源官网：https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+
+将镜像源文本添加到/etc/apt/sources.list文件里
+</div></code></pre>
+<p><strong>2. 仍然报错，更换DNS</strong></p>
+<blockquote>
+<p>sudo vi /etc/resolv.conf</p>
+</blockquote>
+<p>在其中添加：</p>
+<pre class="hljs"><code><div>nameserver 127.0.1.1
+#这里用的是阿里云的DNS服务器
+nameserver 223.5.5.5  
+nameserver 223.6.6.6
+</div></code></pre>
+<p><strong>3. WSL重启后，设置的DNS失效</strong></p>
+<blockquote>
+<p>sudo vim /etc/wsl.conf</p>
+</blockquote>
+<p><em>添加以下内容</em></p>
+<pre class="hljs"><code><div>[network]
+generateResolvConf = <span class="hljs-literal">false</span>
+</div></code></pre>
+<p><em>重新启动wsl</em></p>
+<blockquote>
+<p>wsl -d “your wsl name”</p>
+</blockquote>
+<p><em>再修改/etc/resolv.conf</em></p>
+<p><a href="https://www.ucamc.com/e-learning/computer-skills/421-wsl%E6%89%8B%E5%8B%95%E8%A8%AD%E7%BD%AEdns%E4%B8%8D%E8%A2%AB%E9%87%8D%E7%BD%AE%E7%82%BA%E9%BB%98%E8%AA%8D">参考文章：wsl手動設置dns不被重置為默認</a></p>
+<h2 id="6-ssh%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93">6. ssh问题总结</h2>
+<h3 id="1-ssh%E8%BF%9E%E6%8E%A5%E5%87%BA%E7%8E%B0permission-denied-please-try-again">1. ssh连接出现Permission denied, please try again.</h3>
+<p><em>进入被连主机的/etc/ssh/sshd_config这个文件</em></p>
+<blockquote>
+<p>vi /etc/ssh/sshd_config</p>
+</blockquote>
+<p><em>找到 <strong>PermitRootLogin prohibit-password</strong>，改为 <strong>PermitRootLogin yes</strong></em></p>
+<p><em>重启 ssh 服务：</em></p>
+<blockquote>
+<p>/etc/init.d/ssh restart</p>
+</blockquote>
+<h3 id="2-ssh%E8%BF%9E%E6%8E%A5%E6%8E%89%E7%BA%BF">2. ssh连接掉线</h3>
+<p>修改C:\ProgramData\ssh\sshd_config文件sshd_config</p>
+<blockquote>
+<p>ClientAliveInterval 30 # 30s给客户端发送一次心跳</p>
+</blockquote>
+<blockquote>
+<p>ClientAliveCountMax 3  # 此客户端没有返回心跳，断开连接</p>
+</blockquote>
+<p><strong>Reference</strong><br>
+<a href="https://blog.csdn.net/The_Time_Runner/article/details/105210287">(20200328已解决)ssh经常掉线</a></p>
+<h3 id="3-windows%E6%B7%BB%E5%8A%A0authorizedkeys%E6%97%A0%E6%95%88">3. windows添加authorized_keys无效</h3>
+<ol>
+<li>添加authorized_keys到c盘用户下的.ssh;</li>
+<li>修改C:\ProgramData\ssh\sshd_config文件，注释最后两行保存；<pre class="hljs"><code><div>#Match Group administrators
+#       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+</div></code></pre>
+</li>
+<li>重启sshd服务。</li>
+</ol>
+<h3 id="4-%E4%BF%AE%E6%94%B9windows%E7%9A%84ssh%E9%BB%98%E8%AE%A4shell%E4%B8%BApowershell">4. 修改windows的ssh默认shell为powershell</h3>
+<pre><code>在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
+</code></pre>
+<p>或者以管理员身份启动 PowerShell，然后执行下面的命令完成注册表项的添加：</p>
+<blockquote>
+<p>New-ItemProperty -Path &quot;HKLM:\SOFTWARE\OpenSSH&quot; -Name DefaultShell -Value &quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -PropertyType String -Force</p>
+</blockquote>
+<p><strong>Reference</strong><br>
+<a href="https://www.cnblogs.com/sparkdev/p/10166061.html">Windows 支持OpenSSH 了！ - sparkdev</a></p>
+
+</body>
+</html>
