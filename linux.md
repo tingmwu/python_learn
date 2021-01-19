@@ -218,6 +218,7 @@ Host root
 [原文](https://github.com/conda/conda/issues/9948)
 > 解决办法：更换miniconda安装版本为**4.7.12**(*开始使用版本为4.8.3*)
 
+<<<<<<< HEAD
 *ps: 安装anaconda后想更换安装路径，需要修改anaconda3/bin/conda中的内容*
 ## 3. sudo: unable to resolve host xxxxx
 
@@ -316,5 +317,30 @@ generateResolvConf = false
 
 **Reference**<br>
 [Windows 支持OpenSSH 了！ - sparkdev](https://www.cnblogs.com/sparkdev/p/10166061.html)
+=======
+## 3. sudo: unable to resolve host xxxxx
+>>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 
+> sudo vi /etc/hosts
+> 
+将**127.0.0.1 localhost** 改为 **127.0.0.1 localhost xxxx**(你的主机名)
+
+*ps:修改主机名 **vi /etc/hostname** 然后 **sudo reboot***
+
+## 4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported
+> sudo chmod 600 /etc/sudoers
+> 
+> sudo vi /etc/sudoers
+在 **root ALL=(ALL) ALL** 下添加 **xxx ALL=(ALL) ALL**
+```
+youuser ALL=(ALL) ALL
+%youuser ALL=(ALL) ALL
+youuser ALL=(ALL) NOPASSWD: ALL
+%youuser ALL=(ALL) NOPASSWD: ALL
+
+第一行:允许用户youuser执行sudo命令(需要输入密码).
+第二行:允许用户组youuser里面的用户执行sudo命令(需要输入密码).
+第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
+第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
+```
 
