@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html>
 <head>
 <title>linux.md</title>
@@ -225,13 +224,6 @@ pre code {
 	border-color: rgba(255, 255, 255, 0.18);
 }
 
-=======
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>linux学习</title>
-        <style>
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 </style>
 
 <style>
@@ -361,7 +353,6 @@ code {
 }
 
 </style>
-<<<<<<< HEAD
 
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 </head>
@@ -376,15 +367,6 @@ code {
   </script>
 <h1 id="linux%E5%AD%A6%E4%B9%A0">linux学习</h1>
 <h2 id="apt-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90">apt 更换国内源</h2>
-=======
-        
-        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
-        
-    </head>
-    <body class="vscode-light">
-        <h1 id="linux学习">linux学习</h1>
-<h2 id="apt-更换国内源">apt 更换国内源</h2>
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 <blockquote>
 <p><em>修改 /etc/apt/sources.list 文件即可，将内容更换为任意一种国内源即可</em></p>
 </blockquote>
@@ -507,17 +489,8 @@ D:\Anaconda3\Library\bin
 
 conda config --<span class="hljs-built_in">set</span> show_channel_urls yes
 </div></code></pre>
-<<<<<<< HEAD
 <p><em>其他源：</em></p>
 <pre class="hljs"><code><div><span class="hljs-comment"># 1. 中科大</span>
-=======
-<h2 id="设置conda默认环境">设置conda默认环境</h2>
-<pre><code class="language-sh"><div>vim ~/.bashrc
-在文件末尾添加 <span class="hljs-built_in">source</span> activate myenv 
-</div></code></pre>
-<p><strong>其他源：</strong></p>
-<pre><code class="language-sh"><div><span class="hljs-comment"># 1. 中科大</span>
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 <span class="hljs-comment"># 2.清华</span>
@@ -565,6 +538,81 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
     IdentityFile C:\Users\%user%\.ssh\id_rsa
 </div></code></pre>
 <p><em>4. 选择connect host之后就可以操作了</em></p>
+<h1 id="linux%E7%B3%BB%E7%BB%9F%E8%BF%81%E7%A7%BB">linux系统迁移</h1>
+<h2 id="tar%E6%96%B9%E6%B3%95">tar方法</h2>
+<ol>
+<li>打包<pre class="hljs"><code><div><span class="hljs-comment"># ============打包=======================</span>
+<span class="hljs-built_in">cd</span> /
+tar -cvpzf backup.tar.gz --exclude=/backup.tar.gz --one-file-system /  <span class="hljs-comment"># 适用于只有一个分区</span>
+
+<span class="hljs-comment"># 如果打包后的压缩包太大，可以分卷压缩，有两种方法</span>
+tar -cvpz --exclude=/backup.tar.gz --one-file-system / | split -d -b 2048m - backup.tar.gz
+
+<span class="hljs-comment"># 或者完整压缩完之后再分割</span>
+split -d -b 3900m /path/to/backup.tar.gz /name/of/backup.tar.gz
+
+</div></code></pre>
+</li>
+<li>还原</li>
+</ol>
+<ul>
+<li>
+<p>将打包好的文件拷贝到U盘或者其它存储介质，利用linux-live进入系统；</p>
+</li>
+<li>
+<p>进入live系统后，搜索disk工具，将待安装系统的硬盘格式化，并新建一个分区用作安装系统（如果打包的系统有多个分区，那也建立对应分区）；</p>
+</li>
+<li>
+<p>利用fdisk查看硬盘设备, 找到自己的分区，例如/dev/sda1</p>
+<blockquote>
+<p>fdisk -l  # 查看分区命令</p>
+</blockquote>
+</li>
+<li>
+<p>挂载分区</p>
+<blockquote>
+<p>mount /dev/sda1 /mnt   # 将 /dev/sda1 挂载到 /mnt(自己选择其它目录也可以)</p>
+</blockquote>
+</li>
+<li>
+<p>解压系统</p>
+<blockquote>
+<p>sudo tar -xvpzf /path/to/backup.tar.gz -C /mnt --numeric-owner # 单个压缩包采用这种方式</p>
+</blockquote>
+<blockquote>
+<p>cat backup.tar.gz* | tar -xvpz -C /mnt --numeric-owner  # 分卷压缩采用这种方式</p>
+</blockquote>
+</li>
+<li>
+<p>修改UUID</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># 查看/dev/sda1的 UUID</span>
+blkid 或者 lsblk -f 
+
+<span class="hljs-comment"># 修改UUID</span>
+sudo vi /mnt/etc/fstab <span class="hljs-comment"># 将 文件中 /dev/sda1的UUID替换为上面的UUID</span>
+</div></code></pre>
+</li>
+<li>
+<p>修复grub</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># 挂载分区</span>
+<span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> dev proc sys ; <span class="hljs-keyword">do</span> mount --<span class="hljs-built_in">bind</span> /<span class="hljs-variable">$f</span> /mnt/<span class="hljs-variable">$f</span> ; <span class="hljs-keyword">done</span> 
+
+<span class="hljs-comment"># 设置 /mnt为系统路径</span>
+sudo chroot /mnt <span class="hljs-comment"># 退出用exit</span>
+
+<span class="hljs-comment"># 修复grub</span>
+sudo grub-install /dev/sda <span class="hljs-comment"># 注意这里sda后面不要加数字</span>
+sudo update-grub
+
+<span class="hljs-comment"># 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了</span>
+</div></code></pre>
+</li>
+</ul>
+<p><strong>参考</strong></p>
+<p><a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR<a><br/>
+<a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
+<a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
+<a href="https://codeleading.com/article/802780019/">4. Ubuntu10.10 “grub rescue no such device”问题解决方案</a></p>
 <h1 id="%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93">问题总结</h1>
 <h2 id="1-git-clone-%E9%80%9F%E5%BA%A6%E8%BF%87%E6%85%A2%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">1. Git clone 速度过慢解决办法</h2>
 <h3 id="%E4%BD%BF%E7%94%A8github%E7%9A%84%E9%95%9C%E5%83%8F%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E8%AE%BF%E9%97%AE">使用github的镜像网站进行访问</h3>
@@ -577,31 +625,21 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
 <blockquote>
 <p>解决办法：更换miniconda安装版本为<strong>4.7.12</strong>(<em>开始使用版本为4.8.3</em>)</p>
 </blockquote>
-<<<<<<< HEAD
-<p><em>ps: 安装anaconda后想更换安装路径，需要修改anaconda3/bin/conda中的内容</em></p>
-=======
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<em>ps: 安装anaconda后想更换安装路径，需要修改anaconda3/bin/conda中的内容</em></p>
 <h2 id="3-sudo-unable-to-resolve-host-xxxxx">3. sudo: unable to resolve host xxxxx</h2>
 <blockquote>
 <p>sudo vi /etc/hosts</p>
 </blockquote>
 <p>将<strong>127.0.0.1 localhost</strong> 改为 <strong>127.0.0.1 localhost xxxx</strong>(你的主机名)</p>
 <p><em>ps:修改主机名 <strong>vi /etc/hostname</strong> 然后 <strong>sudo reboot</strong></em></p>
-<<<<<<< HEAD
 <h2 id="4-linux%E4%B8%8Bsudo%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%8A%A5%E9%94%99xxxis-not-in-the-sudoers-file-this-incident-will-be-reported">4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported</h2>
-=======
-<h2 id="4-linux下sudo更改文件权限报错xxxis-not-in-the-sudoers-file-this-incident-will-be-reported">4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported</h2>
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 <blockquote>
 <p>sudo chmod 600 /etc/sudoers</p>
 <p>sudo vi /etc/sudoers
 在 <strong>root ALL=(ALL) ALL</strong> 下添加 <strong>xxx ALL=(ALL) ALL</strong></p>
 </blockquote>
-<<<<<<< HEAD
 <pre class="hljs"><code><div>youuser ALL=(ALL) ALL
-=======
-<pre><code><code><div>youuser ALL=(ALL) ALL
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 %youuser ALL=(ALL) ALL
 youuser ALL=(ALL) NOPASSWD: ALL
 %youuser ALL=(ALL) NOPASSWD: ALL
@@ -610,7 +648,6 @@ youuser ALL=(ALL) NOPASSWD: ALL
 第二行:允许用户组youuser里面的用户执行sudo命令(需要输入密码).
 第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
 第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
-<<<<<<< HEAD
 </div></code></pre>
 <h2 id="5-%E6%89%A7%E8%A1%8Csudo-apt-get-update%E6%8A%A5%E9%94%99">5 执行sudo apt-get update报错</h2>
 <p><strong>1. 换源</strong></p>
@@ -674,6 +711,16 @@ generateResolvConf = <span class="hljs-literal">false</span>
 </li>
 <li>重启sshd服务。</li>
 </ol>
+<ul>
+<li><strong>linux下出现同样问题</strong>）<br></li>
+</ul>
+<pre class="hljs"><code><div>查看日志/var/log/secure如果显示Authentication refused: bad ownership or modes for directory /home/user/.ssh
+    只需chmod -R 700 ~/.ssh
+如果显示的是/home/user的权限有问题，修改 /home/usr的权限为700就可以了（不加 -R 参数）
+因为用户目录以及 .ssh目录权限只能是用户自己，authorized_keys的权限为600
+</div></code></pre>
+<p><strong>参考：</strong>
+<a href="https://chemicloud.com/kb/article/ssh-authentication-refused-bad-ownership-or-modes-for-directory/">SSH Authentication Refused: Bad Ownership or Modes for Directory</a></p>
 <h3 id="4-%E4%BF%AE%E6%94%B9windows%E7%9A%84ssh%E9%BB%98%E8%AE%A4shell%E4%B8%BApowershell">4. 修改windows的ssh默认shell为powershell</h3>
 <pre><code>在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
 </code></pre>
@@ -683,9 +730,28 @@ generateResolvConf = <span class="hljs-literal">false</span>
 </blockquote>
 <p><strong>Reference</strong><br>
 <a href="https://www.cnblogs.com/sparkdev/p/10166061.html">Windows 支持OpenSSH 了！ - sparkdev</a></p>
-=======
-</div></code></code></pre>
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
+<h2 id="7-sudo-unable-to-resolve-host-xxxxx">7. sudo: unable to resolve host xxxxx</h2>
+<blockquote>
+<p>sudo vi /etc/hosts</p>
+</blockquote>
+<p>将<strong>127.0.0.1 localhost</strong> 改为 <strong>127.0.0.1 localhost xxxx</strong>(你的主机名)</p>
+<p><em>ps:修改主机名 <strong>vi /etc/hostname</strong> 然后 <strong>sudo reboot</strong></em></p>
+<h2 id="8-linux%E4%B8%8Bsudo%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%8A%A5%E9%94%99xxxis-not-in-the-sudoers-file-this-incident-will-be-reported">8. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported</h2>
+<blockquote>
+<p>sudo chmod 600 /etc/sudoers</p>
+<p>sudo vi /etc/sudoers
+在 <strong>root ALL=(ALL) ALL</strong> 下添加 <strong>xxx ALL=(ALL) ALL</strong></p>
+</blockquote>
+<pre class="hljs"><code><div>youuser ALL=(ALL) ALL
+%youuser ALL=(ALL) ALL
+youuser ALL=(ALL) NOPASSWD: ALL
+%youuser ALL=(ALL) NOPASSWD: ALL
+
+第一行:允许用户youuser执行sudo命令(需要输入密码).
+第二行:允许用户组youuser里面的用户执行sudo命令(需要输入密码).
+第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
+第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
+</div></code></pre>
 
 </body>
 </html>

@@ -206,6 +206,63 @@ Host root
 
 *4. 选择connect host之后就可以操作了*
 
+# linux系统迁移
+## tar方法
+1. 打包
+    ```bash
+    # ============打包=======================
+    cd /
+    tar -cvpzf backup.tar.gz --exclude=/backup.tar.gz --one-file-system /  # 适用于只有一个分区
+
+    # 如果打包后的压缩包太大，可以分卷压缩，有两种方法
+    tar -cvpz --exclude=/backup.tar.gz --one-file-system / | split -d -b 2048m - backup.tar.gz
+
+    # 或者完整压缩完之后再分割
+    split -d -b 3900m /path/to/backup.tar.gz /name/of/backup.tar.gz
+
+    ```
+2. 还原
+
+- 将打包好的文件拷贝到U盘或者其它存储介质，利用linux-live进入系统；
+- 进入live系统后，搜索disk工具，将待安装系统的硬盘格式化，并新建一个分区用作安装系统（如果打包的系统有多个分区，那也建立对应分区）；
+- 利用fdisk查看硬盘设备, 找到自己的分区，例如/dev/sda1
+    > fdisk -l  # 查看分区命令
+- 挂载分区
+    > mount /dev/sda1 /mnt   # 将 /dev/sda1 挂载到 /mnt(自己选择其它目录也可以)
+- 解压系统
+    > sudo tar -xvpzf /path/to/backup.tar.gz -C /mnt --numeric-owner # 单个压缩包采用这种方式
+
+    > cat backup.tar.gz* | tar -xvpz -C /mnt --numeric-owner  # 分卷压缩采用这种方式
+- 修改UUID
+    ```bash
+    # 查看/dev/sda1的 UUID
+    blkid 或者 lsblk -f 
+
+    # 修改UUID
+    sudo vi /mnt/etc/fstab # 将 文件中 /dev/sda1的UUID替换为上面的UUID
+    ```
+
+- 修复grub
+    ```bash
+    # 挂载分区
+    for f in dev proc sys ; do mount --bind /$f /mnt/$f ; done 
+    
+    # 设置 /mnt为系统路径
+    sudo chroot /mnt # 退出用exit
+
+    # 修复grub
+    sudo grub-install /dev/sda # 注意这里sda后面不要加数字
+    sudo update-grub
+
+    # 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了
+    ```
+**参考**
+
+<a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR<a><br/>
+<a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
+<a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
+[4. Ubuntu10.10 “grub rescue no such device”问题解决方案](https://codeleading.com/article/802780019/)
+
 # 问题总结
 ## 1. Git clone 速度过慢解决办法
 
@@ -309,6 +366,16 @@ generateResolvConf = false
     ```
 3) 重启sshd服务。
 
+- **linux下出现同样问题**）<br>
+```
+查看日志/var/log/secure如果显示Authentication refused: bad ownership or modes for directory /home/user/.ssh
+    只需chmod -R 700 ~/.ssh
+如果显示的是/home/user的权限有问题，修改 /home/usr的权限为700就可以了（不加 -R 参数）
+因为用户目录以及 .ssh目录权限只能是用户自己，authorized_keys的权限为600
+```
+**参考：**
+[SSH Authentication Refused: Bad Ownership or Modes for Directory](https://chemicloud.com/kb/article/ssh-authentication-refused-bad-ownership-or-modes-for-directory/)
+
 ### 4. 修改windows的ssh默认shell为powershell
     在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
     
@@ -317,17 +384,15 @@ generateResolvConf = false
 
 **Reference**<br>
 [Windows 支持OpenSSH 了！ - sparkdev](https://www.cnblogs.com/sparkdev/p/10166061.html)
-=======
-## 3. sudo: unable to resolve host xxxxx
->>>>>>> 5349126840e9add779ef01d2a25b15df224b569a
 
+## 7. sudo: unable to resolve host xxxxx
 > sudo vi /etc/hosts
 > 
 将**127.0.0.1 localhost** 改为 **127.0.0.1 localhost xxxx**(你的主机名)
 
 *ps:修改主机名 **vi /etc/hostname** 然后 **sudo reboot***
 
-## 4. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported
+## 8. linux下sudo更改文件权限报错xxxis not in the sudoers file. This incident will be reported
 > sudo chmod 600 /etc/sudoers
 > 
 > sudo vi /etc/sudoers
