@@ -590,6 +590,7 @@ blkid 或者 lsblk -f
 
 <span class="hljs-comment"># 修改UUID</span>
 sudo vi /mnt/etc/fstab <span class="hljs-comment"># 将 文件中 /dev/sda1的UUID替换为上面的UUID</span>
+sudo vi /mnt/etc/initramfs-tools/conf.d/resume（这里存储swap分区UUID，如果没有swap分区可以删除）
 </div></code></pre>
 </li>
 <li>
@@ -603,6 +604,7 @@ sudo chroot /mnt <span class="hljs-comment"># 退出用exit</span>
 <span class="hljs-comment"># 修复grub</span>
 sudo grub-install /dev/sda <span class="hljs-comment"># 注意这里sda后面不要加数字</span>
 sudo update-grub
+(ps: 可以试试直接grub-install --root-directory=/mnt /dev/sda, 可能就不需要挂载分区再用chroot进入啥的)
 
 <span class="hljs-comment"># 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了</span>
 </div></code></pre>
@@ -612,7 +614,8 @@ sudo update-grub
 <p><a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR<a><br/>
 <a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
 <a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
-<a href="https://codeleading.com/article/802780019/">4. Ubuntu10.10 “grub rescue no such device”问题解决方案</a></p>
+<a href="https://codeleading.com/article/802780019/">4. Ubuntu10.10 “grub rescue no such device”问题解决方案</a>
+<a href="https://itectec.com/ubuntu/ubuntu-how-does-etc-initramfs-tools-conf-d-resume-work/">Ubuntu – How does /etc/initramfs-tools/conf.d/resume work</a></p>
 <h1 id="%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93">问题总结</h1>
 <h2 id="1-git-clone-%E9%80%9F%E5%BA%A6%E8%BF%87%E6%85%A2%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">1. Git clone 速度过慢解决办法</h2>
 <h3 id="%E4%BD%BF%E7%94%A8github%E7%9A%84%E9%95%9C%E5%83%8F%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E8%AE%BF%E9%97%AE">使用github的镜像网站进行访问</h3>

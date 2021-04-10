@@ -240,6 +240,7 @@ Host root
 
     # 修改UUID
     sudo vi /mnt/etc/fstab # 将 文件中 /dev/sda1的UUID替换为上面的UUID
+    sudo vi /mnt/etc/initramfs-tools/conf.d/resume（这里存储swap分区UUID，如果没有swap分区可以删除）
     ```
 
 - 修复grub
@@ -253,6 +254,7 @@ Host root
     # 修复grub
     sudo grub-install /dev/sda # 注意这里sda后面不要加数字
     sudo update-grub
+    (ps: 可以试试直接grub-install --root-directory=/mnt /dev/sda, 可能就不需要挂载分区再用chroot进入啥的)
 
     # 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了
     ```
@@ -262,6 +264,7 @@ Host root
 <a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
 <a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
 [4. Ubuntu10.10 “grub rescue no such device”问题解决方案](https://codeleading.com/article/802780019/)
+[Ubuntu – How does /etc/initramfs-tools/conf.d/resume work](https://itectec.com/ubuntu/ubuntu-how-does-etc-initramfs-tools-conf-d-resume-work/)
 
 # 问题总结
 ## 1. Git clone 速度过慢解决办法
