@@ -90,7 +90,7 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security universe deb htt
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
-trusted-host=mirrors.aliyun.com
+trusted-host=pypi.tuna.tsinghua.edu.cn
 
 # 或者
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
@@ -412,3 +412,43 @@ youuser ALL=(ALL) NOPASSWD: ALL
 第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
 ```
 
+## 9.增加swap空间大小
+```sh
+# 查看交换空间大小
+free -m
+
+# 创建一个 Swap 文件
+sudo fallocate -l 1G /swap/swapfile # 如果不存在fallocate命令采用下面步骤
+
+mkdir /swap
+cd /swap
+sudo dd if=/dev/zero of=swapfile bs=1024 count=2000000 # bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000
+sudo mkswap -f swapfile # 生成文件转为Swap文件
+
+
+# 激活swap文件
+sudo chmod 0600 ./swapfile  
+sudo swapon ./swapfile
+
+# 卸载swap文件
+sudo swapoff ./swapfile
+
+如果需要一直保持这个 swap ，可以把它写入 /etc/fstab 文件。
+/swap/swapfile swap swap defaults 0 0
+```
+
+参考：[How to Create Swap File on Linux](https://help.ubuntu.com/community/SwapFaq)
+
+
+调整Swappiness值
+```sh
+# Swappiness是Linux内核属性，它定义系统多久使用一次swap交换空间。 它的值可以在0到100之间。较低的值将使内核尽可能避免交换，而较高的值将使内核更积极地使用交换空间。
+
+cat /proc/sys/vm/swappiness # 查看swappiness值
+
+sudo sysctl vm.swappiness=10 # 修改
+
+# 让swapiness启动后保持不变
+# 在/etc/sysctl.conf添加vm.swappiness=10
+```
+参考：[如何在Ubuntu 20.04上添加swap交换空间](https://www.myfreax.com/how-to-add-swap-space-on-ubuntu-20-04/)

@@ -450,7 +450,7 @@ deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security universe deb htt
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 [install]
-trusted-host=mirrors.aliyun.com
+trusted-host=pypi.tuna.tsinghua.edu.cn
 
 <span class="hljs-comment"># 或者</span>
 pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
@@ -755,6 +755,41 @@ youuser ALL=(ALL) NOPASSWD: ALL
 第三行:允许用户youuser执行sudo命令,并且在执行的时候不输入密码.
 第四行:允许用户组youuser里面的用户执行sudo命令,并且在执行的时候不输入密码.
 </div></code></pre>
+<h2 id="9%E5%A2%9E%E5%8A%A0swap%E7%A9%BA%E9%97%B4%E5%A4%A7%E5%B0%8F">9.增加swap空间大小</h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># 查看交换空间大小</span>
+free -m
+
+<span class="hljs-comment"># 创建一个 Swap 文件</span>
+sudo fallocate -l 1G /swap/swapfile <span class="hljs-comment"># 如果不存在fallocate命令采用下面步骤</span>
+
+mkdir /swap
+<span class="hljs-built_in">cd</span> /swap
+sudo dd <span class="hljs-keyword">if</span>=/dev/zero of=swapfile bs=1024 count=2000000 <span class="hljs-comment"># bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000</span>
+sudo mkswap -f swapfile <span class="hljs-comment"># 生成文件转为Swap文件</span>
+
+
+<span class="hljs-comment"># 激活swap文件</span>
+sudo chmod 0600 ./swapfile  
+sudo swapon ./swapfile
+
+<span class="hljs-comment"># 卸载swap文件</span>
+sudo swapoff ./swapfile
+
+如果需要一直保持这个 swap ，可以把它写入 /etc/fstab 文件。
+/swap/swapfile swap swap defaults 0 0
+</div></code></pre>
+<p>参考：<a href="https://help.ubuntu.com/community/SwapFaq">How to Create Swap File on Linux</a></p>
+<p>调整Swappiness值</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Swappiness是Linux内核属性，它定义系统多久使用一次swap交换空间。 它的值可以在0到100之间。较低的值将使内核尽可能避免交换，而较高的值将使内核更积极地使用交换空间。</span>
+
+cat /proc/sys/vm/swappiness <span class="hljs-comment"># 查看swappiness值</span>
+
+sudo sysctl vm.swappiness=10 <span class="hljs-comment"># 修改</span>
+
+<span class="hljs-comment"># 让swapiness启动后保持不变</span>
+<span class="hljs-comment"># 在/etc/sysctl.conf添加vm.swappiness=10</span>
+</div></code></pre>
+<p>参考：<a href="https://www.myfreax.com/how-to-add-swap-space-on-ubuntu-20-04/">如何在Ubuntu 20.04上添加swap交换空间</a></p>
 
 </body>
 </html>

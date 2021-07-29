@@ -1,5 +1,5 @@
 import requests
-import os
+import os, sys
 # from configparser import ConfigParser
 
 
@@ -9,12 +9,13 @@ def get_tracker():
     try:
         r = requests.get(url)
         r.raise_for_status()
+        return r.text
     except:
         print('failed get tracker from {}'.format(url))
-    return r.text
+        sys.exit(0)
 
 def write_conf(trackers):
-    path = 'c:/users/tmdd/.aria2/aria2.conf'
+    path = './aria2.conf'
 
     data = ''
     with open(path, 'r+', encoding='utf-8') as fp:
@@ -28,6 +29,7 @@ def write_conf(trackers):
 
 if __name__ == '__main__':
     trackers = get_tracker()
+#    print(trackers)
     write_conf(trackers)
     print("更新tracker成功！")
     os.system("pause")
