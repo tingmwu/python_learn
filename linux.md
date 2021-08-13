@@ -423,15 +423,18 @@ sudo fallocate -l 1G /swap/swapfile # 如果不存在fallocate命令采用下面
 mkdir /swap
 cd /swap
 sudo dd if=/dev/zero of=swapfile bs=1024 count=2000000 # bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000
-sudo mkswap -f swapfile # 生成文件转为Swap文件
 
 
 # 激活swap文件
+sudo mkswap -f swapfile # 生成文件转为Swap文件
 sudo chmod 0600 ./swapfile  
 sudo swapon ./swapfile
 
 # 卸载swap文件
 sudo swapoff ./swapfile
+
+# 查看交换分区文件
+swapon -s
 
 如果需要一直保持这个 swap ，可以把它写入 /etc/fstab 文件。
 /swap/swapfile swap swap defaults 0 0
