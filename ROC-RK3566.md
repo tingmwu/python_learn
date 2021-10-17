@@ -144,3 +144,8 @@ ps: 后面如果是修改部分文件可以使用全自动编译命令，自动�
 ![avator](./imag/Snipaste_2021-08-12_16-00-28.png)
 
 点击升级即可！
+
+# 遇到板子无法烧入固件，也无法擦除固件的解决方案
+产生原因：板子有两个存储器，在给板子刷固件时进错了模式（loader模式和EMCC模式），将固件刷错存储器
+
+解决办法：[切换升级存储器](https://wiki.t-firefly.com/zh_CN/ROC-RK3566-PC/03-upgrade_firmware_with_flash.html)

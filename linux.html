@@ -765,15 +765,18 @@ sudo fallocate -l 1G /swap/swapfile <span class="hljs-comment"># 如果不存在
 mkdir /swap
 <span class="hljs-built_in">cd</span> /swap
 sudo dd <span class="hljs-keyword">if</span>=/dev/zero of=swapfile bs=1024 count=2000000 <span class="hljs-comment"># bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000</span>
-sudo mkswap -f swapfile <span class="hljs-comment"># 生成文件转为Swap文件</span>
 
 
 <span class="hljs-comment"># 激活swap文件</span>
+sudo mkswap -f swapfile <span class="hljs-comment"># 生成文件转为Swap文件</span>
 sudo chmod 0600 ./swapfile  
 sudo swapon ./swapfile
 
 <span class="hljs-comment"># 卸载swap文件</span>
 sudo swapoff ./swapfile
+
+<span class="hljs-comment"># 查看交换分区文件</span>
+swapon -s
 
 如果需要一直保持这个 swap ，可以把它写入 /etc/fstab 文件。
 /swap/swapfile swap swap defaults 0 0

@@ -70,6 +70,7 @@ source ~/.zshrc
 
 ### 1.7 启动测试
 ```sh
+source /opt/ros/melodic/setup.bash
 roscore
 
 # 若正常出现以下信息，说明已经成功安装
@@ -98,6 +99,13 @@ ROS_MASTER_URI=http://nx:11311/
 setting /run_id to cb38e680-dee2-11ea-bae1-70665563e003
 process[rosout-1]: started with pid [1228]
 started core service [/rosout]
+
+# 新开一个terminal，运行以下命令，打开小乌龟窗口
+rosrun turtlesim turtlesim_node
+# 新开一个terminal，运行以下命令，打开乌龟控制窗口，可使用方向键控制乌龟运动
+rosrun turtlesim turtle_teleop_key
+# 新开一个terminal，运行以下命令，可以看到ROS的图形化界面，展示结点的关系
+rosrun rqt_graph rqt_graph
 ```
 
 ## 2. 安装过程中问题解决
@@ -227,4 +235,7 @@ gbpdistro file:/etc/ros/rosdep/sources.list.d/rosdistro/releases/fuerte.yaml fue
 
 # newer distributions (Groovy, Hydro, ...) must not be listed anymore, they are being fetched from the rosdistro index.yaml instead
 ```
+### 2.4 出现 roslaunch: [ ] is neither a launch file in package [ ] nor is [ ] a launch file name
+> source /home/gabriel/catkin_ws/devel/setup.bash
 
+参考：[roslaunch: [ ] is neither a launch file in package [ ] nor is [ ] a launch file name](https://answers.ros.org/question/143496/roslaunch-is-neither-a-launch-file-in-package-nor-is-a-launch-file-name/)
