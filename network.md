@@ -52,7 +52,7 @@ wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -Dwext
 
 [[How to connect and disconnect to a network manually in terminal?](https://askubuntu.com/questions/16584/how-to-connect-and-disconnect-to-a-network-manually-in-terminal)](https://askubuntu.com/questions/16584/how-to-connect-and-disconnect-to-a-network-manually-in-terminal)
 
-## 配置/etc/network/interfaces 
+#### 配置/etc/network/interfaces 
 
 ```sh
 auto lo
@@ -106,63 +106,59 @@ nmcli和nmtui是network-manager下的网络管理工具，首先安装network-ma
 
 1. 网络扫描
 
-    ```shell
-    nmcli # 直接显示现有网络设备和连接情况
-    nmcli dev # 显示网络设备，可以看到有线网络设备和无线网络设备名称
-```sh
+```shell
+nmcli # 直接显示现有网络设备和连接情况
+nmcli dev # 显示网络设备，可以看到有线网络设备和无线网络设备名称
+```
 
 2. 有线网络连接
 
-	```sh
-	# eth0使用HDCP分配IP
-	nmcli con add type ethernet autoconnect no ifname eth0 # eth0是你的有线网卡设备名称
-	
-	# eth0手动设置IP
-	 nmcli con add type ethernet autoconnect yes ifname eth0 ipv4.addr "192.168.0.0/24" ipv4.method manual
-	 
-	# nmcli创建热点
-	nmcli device wifi hotspot ifname wlan0 con-name MyHostspot ssid MyHostspotSSID password 12345678
-	 
-	nmcli connection add type ethernet ifname enp5s0    # 创建一个连接。这里没有指定method，则默认使用auto，也就是自动配置。类型是以太网，类型有以太网、wifi，adsl等，具体参考文章头部给的url
-	nmcli connection add ifname enp5s0 autoconnect yes type ethernet ip4 10.1.1.1/8 gw4 10.1.0.1    # 创建一个静态ip的以太网连接
-	
-	nmcli connection modify  myEth +ipv4.dns 8.8.8.8    # 给myEth的配置添加dns
-	nmcli connection modify  myEth ipv4.method manual  ipv4.addresses "192.168.43.64/24,10.0.0.23/8"   #修改myEth连接为手动，ip地址设置为两个
-	nmcli con mod myEth  autoconnect no     # 设置myEth连接配置为不自动连接(重启操作系统或从起NetworkManager就能看到不会自动连接了)
+```sh
+# eth0使用HDCP分配IP
+nmcli con add type ethernet autoconnect no ifname eth0 # eth0是你的有线网卡设备名称
+
+# eth0手动设置IP
+nmcli con add type ethernet autoconnect yes ifname eth0 ipv4.addr "192.168.0.0/24" ipv4.method manual
+
+# nmcli创建热点
+nmcli device wifi hotspot ifname wlan0 con-name MyHostspot ssid MyHostspotSSID password 12345678
+
+nmcli connection add type ethernet ifname enp5s0    # 创建一个连接。这里没有指定method，则默认使用auto，也就是自动配置。类型是以太网，类型有以太网、wifi，adsl等，具体参考文章头部给的url
+nmcli connection add ifname enp5s0 autoconnect yes type ethernet ip4 10.1.1.1/8 gw4 10.1.0.1    # 创建一个静态ip的以太网连接
+
+nmcli connection modify  myEth +ipv4.dns 8.8.8.8    # 给myEth的配置添加dns
+nmcli connection modify  myEth ipv4.method manual  ipv4.addresses "192.168.43.64/24,10.0.0.23/8"   #修改myEth连接为手动，ip地址设置为两个
+nmcli con mod myEth  autoconnect no     # 设置myEth连接配置为不自动连接(重启操作系统或从起NetworkManager就能看到不会自动连接了)
 ```
 
 3. 无线网络连接
 
-   ```sh
-   # 1. 网络扫描
-   nmcli dev(ice) wifi # 显示所有可用wifi，dev(ice) 表示可以写成device，也可以简写为dev，后面写法相同
-   
-   sudo iw(list) wlan0 scan | grep ESSID # 这条命令适合已经连接wifi时，使用上一条命令只能看到已连接wifi时使用，wlan0为你的无线网卡名称
-   
-   # 2. 添加wifi
-   nmcli dev wifi con(nect) <ESSID_NAME > password <wifi password>
-   
-   # 3.查看wifi连接信息
-   nmcli connection show  # 列出网络连接的配置(存放于内存和硬盘的配置，nmcli -f active connection show 表示显示存储于内存配置， -f profile表示存放于硬盘的配置)
-   
-   nmcli connection show --active  # 仅列出处于活动状态的网络配置
-   
-   nmcli --show-secrets -f  802-11-wireless-security.psk  connection show  myAP001  # 显示myAP001密码，加了--show-secrets或-s才能显示密码明文
-   
-   nmcli connection show --order name # 按配置名排序，可选排序有type、active、name、path(d-bus路径)，+号和-号表示升序和降序，未指定，则默认使用升序。默认排序是：--order active:name:path
-   
-   nmcli connection show uuid 38781e62-4bab-4ba8-a086-bfaece222794  # 按指定关键字显示，关键字有id，uuid、path、apath。 用途是不能使用常规的nmcli connection show <配置名> 来显示的时候，这种显示方法就可以派上用场了。
-   
-   # 4. 切换和删除wifi
-   nmcli connection up prof1        # 激活一个连接，可用于在已保存的几个wifi中进行切换
-   nmcli connection down prof1   # 停用一个连接
-   nmcli dev dis wlan0 # 断开当前wifi连接，用于切换wifi，但不删除配置，停用之后可以重新搜索连接其它wifi
-   nmcli connection del(ete) prof1 #删除一个配置， delete [ id | uuid | path ] ID...
-   
-   
-   
-   
-   ```
+```sh
+# 1. 网络扫描
+nmcli dev(ice) wifi # 显示所有可用wifi，dev(ice) 表示可以写成device，也可以简写为dev，后面写法相同
+
+sudo iw(list) wlan0 scan | grep ESSID # 这条命令适合已经连接wifi时，使用上一条命令只能看到已连接wifi时使用，wlan0为你的无线网卡名称
+
+# 2. 添加wifi
+nmcli dev wifi con(nect) <ESSID_NAME > password <wifi password>
+
+# 3.查看wifi连接信息
+nmcli connection show  # 列出网络连接的配置(存放于内存和硬盘的配置，nmcli -f active connection show 表示显示存储于内存配置， -f profile表示存放于硬盘的配置)
+
+nmcli connection show --active  # 仅列出处于活动状态的网络配置
+
+nmcli --show-secrets -f  802-11-wireless-security.psk  connection show  myAP001  # 显示myAP001密码，加了--show-secrets或-s才能显示密码明文
+
+nmcli connection show --order name # 按配置名排序，可选排序有type、active、name、path(d-bus路径)，+号和-号表示升序和降序，未指定，则默认使用升序。默认排序是：--order active:name:path
+
+nmcli connection show uuid 38781e62-4bab-4ba8-a086-bfaece222794  # 按指定关键字显示，关键字有id，uuid、path、apath。 用途是不能使用常规的nmcli connection show <配置名> 来显示的时候，这种显示方法就可以派上用场了。
+
+# 4. 切换和删除wifi
+nmcli connection up prof1        # 激活一个连接，可用于在已保存的几个wifi中进行切换
+nmcli connection down prof1   # 停用一个连接
+nmcli dev dis wlan0 # 断开当前wifi连接，用于切换wifi，但不删除配置，停用之后可以重新搜索连接其它wifi
+nmcli connection del(ete) prof1 #删除一个配置， delete [ id | uuid | path ] ID...
+```
 
 
 

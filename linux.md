@@ -213,21 +213,23 @@ Host root
     # ============打包=======================
     cd /
     tar -cvpzf backup.tar.gz --exclude=/backup.tar.gz --one-file-system /  # 适用于只有一个分区
-
+    
     # 如果打包后的压缩包太大，可以分卷压缩，有两种方法
     tar -cvpz --exclude=/backup.tar.gz --one-file-system / | split -d -b 2048m - backup.tar.gz
-
+    
     # 或者完整压缩完之后再分割
     split -d -b 3900m /path/to/backup.tar.gz /name/of/backup.tar.gz
-
+    
     ```
 2. 还原
 
 - 将打包好的文件拷贝到U盘或者其它存储介质，利用linux-live进入系统；
 - 进入live系统后，搜索disk工具，将待安装系统的硬盘格式化，并新建一个分区用作安装系统（如果打包的系统有多个分区，那也建立对应分区）；
 - 利用fdisk查看硬盘设备, 找到自己的分区，例如/dev/sda1
+  
     > fdisk -l  # 查看分区命令
 - 挂载分区
+  
     > mount /dev/sda1 /mnt   # 将 /dev/sda1 挂载到 /mnt(自己选择其它目录也可以)
 - 解压系统
     > sudo tar -xvpzf /path/to/backup.tar.gz -C /mnt --numeric-owner # 单个压缩包采用这种方式
@@ -237,7 +239,7 @@ Host root
     ```bash
     # 查看/dev/sda1的 UUID
     blkid 或者 lsblk -f 
-
+    
     # 修改UUID
     sudo vi /mnt/etc/fstab # 将 文件中 /dev/sda1的UUID替换为上面的UUID
     sudo vi /mnt/etc/initramfs-tools/conf.d/resume（这里存储swap分区UUID，如果没有swap分区可以删除）
@@ -250,21 +252,25 @@ Host root
     
     # 设置 /mnt为系统路径
     sudo chroot /mnt # 退出用exit
-
+    
     # 修复grub
     sudo grub-install /dev/sda # 注意这里sda后面不要加数字
     sudo update-grub
     (ps: 可以试试直接grub-install --root-directory=/mnt /dev/sda, 可能就不需要挂载分区再用chroot进入啥的)
-
+    
     # 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了
     ```
-**参考**
+    **参考**
 
 <a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR<a><br/>
 <a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
 <a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
 [4. Ubuntu10.10 “grub rescue no such device”问题解决方案](https://codeleading.com/article/802780019/)
 [Ubuntu – How does /etc/initramfs-tools/conf.d/resume work](https://itectec.com/ubuntu/ubuntu-how-does-etc-initramfs-tools-conf-d-resume-work/)
+
+[5. Ubuntu20.04系统迁移（将efi系统迁移到新硬盘）](https://www.jianshu.com/p/8b067b9bab2c)
+
+
 
 # 问题总结
 ## 1. Git clone 速度过慢解决办法
@@ -381,7 +387,7 @@ generateResolvConf = false
 
 ### 4. 修改windows的ssh默认shell为powershell
     在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
-    
+
 或者以管理员身份启动 PowerShell，然后执行下面的命令完成注册表项的添加：
 > New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 
@@ -422,7 +428,7 @@ sudo fallocate -l 1G /swap/swapfile # 如果不存在fallocate命令采用下面
 
 mkdir /swap
 cd /swap
-sudo dd if=/dev/zero of=swapfile bs=1024 count=2000000 # bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000
+sudo dd if=/dev/zero of=swapfile bs=1024 count=4 # bs为块大小（默认单位为字节），count为块的数量，所以空间大小为 1024 * 2000000
 
 
 # 激活swap文件

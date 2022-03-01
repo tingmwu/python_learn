@@ -45,6 +45,14 @@ sudo apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> c
 * 进入网站之后选择对应的系统版本文件夹，进入pool/stable/，选择amd64, armhf, or arm64之后，选择想要安装的版本的docker-ce docker-ce-cli contaided.io下载后用如下命令安装。
 * > dpkg -i docker-ce\*.deb 
 
+### Install using convenience script
+
+You can run the script with the `DRY_RUN=1` option to learn what steps the script will execute during installation:
+
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+$ DRY_RUN=1 sh ./get-docker.sh
+```
 ### docker换源
 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。
 ```
@@ -57,6 +65,8 @@ Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\con
 ```
 
 [参考](https://lug.ustc.edu.cn/wiki/mirrors/help/docker/)
+
+
 
 ## 2. docker-compose部署
 

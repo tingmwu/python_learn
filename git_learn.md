@@ -79,6 +79,28 @@ git commit --amend
 *如何已经关闭了命令行窗口，无法查看之前git log的版本号*
 > git reflog # 查看之前的提交和回退记录
 
+### git merge
+
+在开发的过程中，一般不会在主分支直接开发，会在主分支master基础上新建一个develop分支，在develop上开发完成后合并在master分支，这时会用到`git merge`命令。
+
+`git merge`有三种用法，`git merge --ff`即fast-forword方式，`git merge`默认使用使用fast-forward方式，
+
+![image-20220225102736632](image/image-20220225102736632.png)
+
+--fast-forward
+
+Git 合并两个分支时，如果顺着一个分支走下去可以到达另一个分支的话，那么 Git 在合并两者时，只会简单地把指针右移，叫做“快进”（fast-forward）不过这种情况如果删除分支，则会丢失merge分支信息。（直接移动master的HEAD到合并的分支）
+
+–squash
+
+把一些不必要commit进行压缩，比如说，你的feature在开发的时候写的commit很乱，那么我们合并的时候不希望把这些历史commit带过来，于是使用–squash进行合并，此时文件已经同合并后一样了，但不移动HEAD，不提交。需要进行一次额外的commit来“总结”一下，然后完成最终的合并。（将代码修改合并到master，需要自己进行commit）
+
+–no-ff
+
+关闭fast-forward模式，在提交的时候，会创建一个merge的commit信息，然后合并的和master分支。（在master创建新的commit，merge的内容就会合并到新建的commit）
+
+[git merge和git merge --no-ff的区别 - 简书 (jianshu.com)](https://www.jianshu.com/p/418323ed2b03)
+
 ## 3. 链接远程仓库 
 [详细说明点这里](https://www.runoob.com/git/git-remote-repo.html)
 由于你的本地 Git 仓库和 GitHub 仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息：
@@ -112,7 +134,7 @@ eg:
 3. 提交修改并上传
 > git add -A    # 增加修改  
 > git commit -m '你的备注信息' # 提交修改
- 
+
 4. 进行同步
 
 > git push -u origin master
@@ -121,7 +143,7 @@ eg:
 
 > git push origin master
 
-     
+​     
 
 <!-- <meta http-equiv="refresh" content="5"> -->
 
