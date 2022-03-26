@@ -260,3 +260,5 @@ endif
 "设置高亮相关项"
 highlight Search ctermbg=black ctermfg=white guifg=white guibg=black
 
+"换行不自动添加注释
+au FileType c,cpp setlocal comments-=:// comments+=f://

@@ -50,7 +50,17 @@ wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -Dwext
 
 > More information about this in `man wpa_supplicant.conf`
 
+
+
+4. dhcp分配ip地址
+
+> iw dev wlan0 link # 查看设备是否连接成功
+>
+> dhcpcd wlan0 # 如果设备连接成功但还是没有ip地址，可以使用dpcpcd分配ip
+
 [[How to connect and disconnect to a network manually in terminal?](https://askubuntu.com/questions/16584/how-to-connect-and-disconnect-to-a-network-manually-in-terminal)](https://askubuntu.com/questions/16584/how-to-connect-and-disconnect-to-a-network-manually-in-terminal)
+
+[[SOLVED\]wpa_supplicant authentication failing (for no obvious reasons)](https://bbs.archlinux.org/viewtopic.php?id=218671)
 
 #### 配置/etc/network/interfaces 
 
