@@ -2,6 +2,28 @@
 
 > 本文讲的linux下网络配置主要是指没有图形界面的情况下（远程ssh、server版本）对Linux进行有线或无线网络的配置。
 
+### ifconfig配置
+
+> ifconfig 可用于临时配置网络，设置ip地址重启后失效
+
+```bash
+# 1. 使用net-tools
+ifconfig eth0 192.168.0.101 netmask 255.255.255.0 # 配置ip和掩码
+route add default gw 192.168.0.1 # 配置网关
+
+# 2. 或者使用 iproute
+ip addr add 192.168.0.101/24 dev eth0
+ip route add defalut via 192.168.0.1 dev eth0
+
+vi /etc/resolv.conf # 配置dns,添加dnsserver
+	nameserver 8.8.8.8
+	
+# ps，如果想重启后自动配置，可以写成脚本，设置开机自启
+# 注意，写开机脚本时，所有应用要用绝对路径，刚启动时没有加载环境变量，例如 ifconfig 要使用 /sbin/ifconfig
+```
+
+
+
 ### 配置文件方法
 
 #### WPA-SUPPLICANT
@@ -64,6 +86,50 @@ wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -Dwext
 
 #### 配置/etc/network/interfaces 
 
+~~这里需要安装network-manager，修改配置后~~
+
+> ~~/etc/init.d/network-manager reload~~
+
+这里删除是因为之前理解错误：
+
+[/etc/interfaces配置无法生效](https://blog.csdn.net/qq_34706955/article/details/78051075)： 这里说明了/etc/interfaces和network-manager是冲突的，如果修改了 interfaces，network-manager就会停止管理，使用nmcli dev status就会看到 unmanaged
+
+想要重新使用network-manager管理：
+
+```bash
+sudo service network-manager stop # 停止 nm服务(nm是指network-manager)
+sudo rm /var/lib/NetworkManager/NetworkManager.state # 移除nm 的状态文件
+sudo vi /etc/NetworkManager/nm-system-settings.conf # 打开nm 的配置文件
+里面有一行：managed=true
+(如果你手工改过/etc/network/interfaces，nm会自己把这行改成：managed=false
+将false 修改成true)
+sudo servicenetwork-manager start
+
+# 修改之后就可以继续使用nmcli 和 nmtui进行管理
+```
+
+
+
+[ubuntu配置静态IP以及interfaces配置不生效问题解决](https://blog.csdn.net/weixin_43099432/article/details/120944870?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-120944870-blog-78051075.pc_relevant_antiscanv2&spm=1001.2101.3001.4242.1&utm_relevant_index=1)： 这里说明了配置 interfaces文件配置静态ip可能不会生效的原因是新版本使用netplan管理静态ip（还没尝试文中说法）
+
+
+
+[修改网络配置文件/etc/network/interfaces之后如何生效（已解决）](https://blog.csdn.net/YueYingGuang/article/details/103697297?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3-103697297-blog-120944870.pc_relevant_scanpaymentv1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3-103697297-blog-120944870.pc_relevant_scanpaymentv1&utm_relevant_index=4)
+
+```bash
+# 1. 重启
+reboot
+
+# 2. 
+ip addr flush dev eth0
+ifdown eth0
+ifup eth0
+```
+
+
+
+**/etc/interfaces配置示例**
+
 ```sh
 auto lo
 iface lo inet loopback
@@ -78,13 +144,12 @@ iface eth0 inet dhcp
 auto eth0
 iface eth0 inet static
 　　address 192.168.0.42
-　　network 192.168.0.0
-　　netmask 255.255.255.0
+　　network 192.168.0.0 # 可有可无
+　　netmask 255.255.255.0 
 　　broadcast 192.168.0.255 # 可有可无
 　　gateway 192.168.0.1
 
-无线网络配置 WiFi
-
+# 无线网络配置 WiFi
 auto wlan0
 iface wlan0 inet dhcp
 　　
@@ -92,11 +157,14 @@ auto wlan0
 iface wlan0 inet dhcp
 　　wpa-ssid “TP-LINK_8D0B8A”
 　　wpa-psk “12345678”
+　
+# DNS服务器配置
+dns-nameservers 8.8.8.8
 ```
 
 [Linux的有线网络 无线网络连接配置与解决方案](https://blog.csdn.net/CSDNhuaong/article/details/77925306)
 
-### 使用network-manager
+### 使用nmcli、nmtui工具
 
 nmcli和nmtui是network-manager下的网络管理工具，首先安装network-manager
 
@@ -170,7 +238,9 @@ nmcli dev dis wlan0 # 断开当前wifi连接，用于切换wifi，但不删除�
 nmcli connection del(ete) prof1 #删除一个配置， delete [ id | uuid | path ] ID...
 ```
 
-
+> nmcli con 所列的connection的配置文件在 /etc/NetworkManager/system-connections下
+>
+> 可以使用 nmcli con show eth0 查看对应配置，然后使用 (例如修改ip)nmcli con modify eth0 ipv4.address 192.168.0.10/24 进行修改，也可以在对应配置文件修改，或者使用nmtui进行修改。 
 
 
 [nmcli命令详解(创建热点，连接wifi，管理连接等)](https://www.cnblogs.com/mind-water/p/12079647.html)

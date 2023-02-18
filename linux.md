@@ -207,6 +207,7 @@ Host root
 *4. 选择connect host之后就可以操作了*
 
 # linux系统迁移
+
 ## tar方法
 1. 打包
     ```bash
@@ -248,7 +249,7 @@ Host root
 - 修复grub
     ```bash
     # 挂载分区
-    for f in dev proc sys ; do mount --bind /$f /mnt/$f ; done 
+    for f in dev proc sys run ; do mount --bind /$f /mnt/$f ; done 
     
     # 设置 /mnt为系统路径
     sudo chroot /mnt # 退出用exit
@@ -256,15 +257,45 @@ Host root
     # 修复grub
     sudo grub-install /dev/sda # 注意这里sda后面不要加数字
     sudo update-grub
-    (ps: 可以试试直接grub-install --root-directory=/mnt /dev/sda, 可能就不需要挂载分区再用chroot进入啥的)
-    
+    (ps: 可以试试直接grub-install --boot-directory=/mnt/boot /dev/sda, 可能就不需要挂载分区再用chroot进入啥的)
+    如果是efi引导，挂载efi分区到 /boot/efi 之后，使用 grub-install --target=x86_64-efi --efi-directory=/boot/efi
     # 修复没有错误的话就可以使用exit退出，然后用umount /mnt取消挂载，或者直接重启拔出U盘就可以了
     ```
+    
+    
+    用以上办法还是无法修复的话可以参考[Boot-Repair](https://help.ubuntu.com/community/Boot-Repair)，在ubuntu-live中安装boot-repair修复引导：
+    
+    ```bash
+    sudo add-apt-repository ppa:yannubuntu/boot-repair && sudo apt update
+    sudo apt install -y boot-repair && boot-repair
+    ```
+    
+    
+    
+    开机后正常进入系统但是卡在`dev/sda1: clean, xxxxxx/6111232 files, xxxxxxx/24414464 blocks`，可以参考[Ubuntu开机无法进入桌面_jxq1994的博客-CSDN博客_ubuntu进不去桌面环境](https://blog.csdn.net/jxq1994/article/details/124489380)
+    
+    系统启动后，在BIOS引导界面按“ESC”键进入选择菜单，选择第一个“Ubuntu”，按“e”键进入编辑模式。
+    
+    ![ubuntu16.04桌面版开机进入命令行模式](https://img-blog.csdnimg.cn/img_convert/b9608d37fcb163026fb7ee5ecd34375c.png)
+    
+    修改后按CTRL+X或F10引导系统，启动之后就是命令行模式了，参考上面文章的第三个解决办法解决了。
+    
+    ```bash
+    apt-get update
+    apt-get remove gdm3
+    apt-get autoremove
+    apt-get install lightdm
+    reboot
+    ```
+    
+    
+    
     **参考**
 
-<a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR<a><br/>
-<a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a></br>
-<a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a></br>
+<a href='https://help.ubuntu.com/community/BackupYourSystem/TAR'>1. Ubuntu Documentation BackupYourSystem/TAR</a>
+
+<a href='https://askubuntu.com/questions/235362/trying-to-reinstall-grub-2-cannot-find-a-device-for-boot-is-dev-mounted'>2. Trying to reinstall GRUB 2, cannot find a device for /boot (is /dev mounted?)</a>
+<a href='https://jiajunhuang.com/articles/2020_05_22-linux_clone_sys.md.html'>3. Linux系统迁移记录(从HDD到SSD)</a>
 [4. Ubuntu10.10 “grub rescue no such device”问题解决方案](https://codeleading.com/article/802780019/)
 [Ubuntu – How does /etc/initramfs-tools/conf.d/resume work](https://itectec.com/ubuntu/ubuntu-how-does-etc-initramfs-tools-conf-d-resume-work/)
 
@@ -272,7 +303,92 @@ Host root
 
 
 
+# 使用代理
+
+- **apt使用代理**
+
+```bash
+# 修改/etc/apt/apt.conf（或者/etc/envrionment），增加
+Acquire::http::proxy "http://127.0.0.1:8000/";
+Acquire::ftp::proxy "ftp://127.0.0.1:8000/";
+Acquire::https::proxy "https://127.0.0.1:8000/";
+
+# 在命令行临时带入
+sudo apt-get -o Acquire::http::proxy="http://127.0.0.1:789/" update
+```
+
+- **git使用代理**
+
+```bash
+git  -c http.proxy="h://127.0.0.1:7890"
+```
+
+
+
+- **pip使用代理**
+
+```bash
+# 永久使用
+[global]
+proxy=http://127.0.0.1:[port]
+
+# 临时使用
+pip install -r requirements.txt --proxy=1:端口号
+```
+
+
+
+- **conda使用代理**
+
+```bash
+# 永久使用
+vi ~/.condarc
+# 末尾加上以下
+proxy_servers:
+  https: http://127.0.0.1:[port]
+```
+
+
+
+- **wget使用代理**
+
+```bash
+# 临时使用
+wget -e "http_proxy=http://127.0.0.1:7890"
+
+# 永久使用
+# 将/etc/wgetrc中与proxy有关的几行复制到~/.wgetrc，并做如下修改：
+#You can set the default proxies for Wget to use for http, https, and ftp.
+# They will override the value in the environment.
+https_proxy = http://127.0.0.1:8087/
+http_proxy = http://127.0.0.1:8087/
+ftp_proxy = http://127.0.0.1:8087/
+
+# If you do not want to use proxy at all, set this to off.
+use_proxy = on
+
+# 这里 use_proxy = on 开启了代理，如果不想使用代理，每次都修改此文件未免麻烦，我们可以在命令中使用-Y参数来临时设置：
+-Y, --proxy=on/off           打开或关闭代理
+```
+
+
+
+- **aria2使用代理**
+
+```bash
+aria2c --all-proxy=[ip]:[port]
+aria2c --http-proxy=[ip]:[port]
+aria2c --https-proxy=[ip]:[port]
+```
+
+
+
+
+
+
+
 # 问题总结
+
 ## 1. Git clone 速度过慢解决办法
 
 ### 使用github的镜像网站进行访问
@@ -386,7 +502,9 @@ generateResolvConf = false
 [SSH Authentication Refused: Bad Ownership or Modes for Directory](https://chemicloud.com/kb/article/ssh-authentication-refused-bad-ownership-or-modes-for-directory/)
 
 ### 4. 修改windows的ssh默认shell为powershell
-    在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
+```
+在运行 OpenSSH Server 的 Windows 系统的注册表中添加一个配置项，注册表路径为 HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH，项的名称为 DefaultShell，项的值为 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe。
+```
 
 或者以管理员身份启动 PowerShell，然后执行下面的命令完成注册表项的添加：
 > New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
@@ -461,3 +579,9 @@ sudo sysctl vm.swappiness=10 # 修改
 # 在/etc/sysctl.conf添加vm.swappiness=10
 ```
 参考：[如何在Ubuntu 20.04上添加swap交换空间](https://www.myfreax.com/how-to-add-swap-space-on-ubuntu-20-04/)
+
+## 10.修改启动引导项
+
+永久修改： 编辑 /etc/default/grub ，修改GRUB_DEFAULT=0，这里的数字为引导列表从上到下为0、1、2、3
+
+临时修改：sudo grub-reboot 2 (这里的数字同上)
