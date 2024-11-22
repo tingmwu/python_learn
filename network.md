@@ -97,13 +97,13 @@ wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -Dwext
 想要重新使用network-manager管理：
 
 ```bash
-sudo service network-manager stop # 停止 nm服务(nm是指network-manager)
+sudo service Network-Manager stop # 停止 nm服务(nm是指network-manager)
 sudo rm /var/lib/NetworkManager/NetworkManager.state # 移除nm 的状态文件
 sudo vi /etc/NetworkManager/nm-system-settings.conf # 打开nm 的配置文件
 里面有一行：managed=true
 (如果你手工改过/etc/network/interfaces，nm会自己把这行改成：managed=false
 将false 修改成true)
-sudo servicenetwork-manager start
+    sudo service Network-Manager start
 
 # 修改之后就可以继续使用nmcli 和 nmtui进行管理
 ```

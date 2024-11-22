@@ -2,7 +2,7 @@
 
 ## 1. 安装docker
 
-[官方文档](https://docs.docker.com/engine/install/ubuntu/)<br>
+[官方文档](https://docs.docker.com/engine/install/ubuntu/)
 _分为 apt 安装和 dpkg 本地安装两种方式_（**推荐本地安装**）
 
 ### _Install using the repository_
@@ -55,7 +55,7 @@ $ DRY_RUN=1 sh ./get-docker.sh
 ```
 ### docker换源
 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。
-```
+```bash
 { 
     "registry-mirrors": [
         "https://docker.mirrors.ustc.edu.cn",
@@ -78,7 +78,7 @@ Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\con
    >
    > sudo apt-get install docker-compose
 
-2. 配置docker-compose.yml <br>
+2. 配置docker-compose.yml 
    docker-compose.yml下载路径 [社区版](https://docs.seafile.com/d/cb1d3f97106847abbf31/files/?p=/docker/docker-compose.yml) [专业版](https://docs.seafile.com/d/cb1d3f97106847abbf31/files/?p=/docker/pro-edition/docker-compose.yml)
 
    需要配置的部分文档中都会有# Requested的注释，注意seafile一栏下的端口- "80:80"(前面的80为服务器端口，后面的80为docker内部端口，一般按需要修改前一个80端口，比如这里修改为- "8000:80")
@@ -87,17 +87,17 @@ Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\con
 
    > docker-compose up -d # -d是后台运行，如果想要看运行信息，可以不加
 
-   **运行问题：** ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?<br>
+   **运行问题：** ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
    **解决办法：** 将当前用户加入docker组
 
-   > sudo gpasswd -a ${USER} docker <br>
-   或者<br>
+   > sudo gpasswd -a ${USER} docker 
+   或者
    > sudo usermod -aG docker $USER
 
-   然后切换到其它用户，再切换回来就正常了。<br>
+   然后切换到其它用户，再切换回来就正常了。
    **参考：**[解决 ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?](https://blog.csdn.net/xiojing825/article/details/79494408)
 
-4. 网页端配置<br>
+4. 网页端配置
    * 登录云服务器控制台开放端口，比如我在步骤2中配置的端口为8000；
    * 打开网页 <http://yourip:8000，输入账号密码登录；>
    * 点击头像->系统设置->设置，分别修改**SERVICE_URL**与**FILE_SERVER_ROOT**为<http://yourip:8000>和<http://yourip:8000/seafhttp>(注意这里一定要填对端口，默认没有端口是因为默认为80端口，在http中可以省略，如果步骤2中修改了端口，这里一定要进行修改，否则客户端无法登录以及正常的上传文件)；
@@ -196,9 +196,19 @@ Error: the user running the script ("root") is not the owner of "/shared/seafile
 sudo chown -R root /opt/seafile-data
 ```
 
-**参考**：<br>
-[Docker部署seafile](https://cloud.seafile.com/published/seafile-manual-cn/docker/%E7%94%A8Docker%E9%83%A8%E7%BD%B2Seafile.md)<br>
+**参考**：
+[Docker部署seafile](https://cloud.seafile.com/published/seafile-manual-cn/docker/%E7%94%A8Docker%E9%83%A8%E7%BD%B2Seafile.md)
 [迁移本地Seafile到docker](https://bbs.seafile.com/t/topic/10958)
 
 
+
+
+
+## onlyoffice部署问题
+
+[OnlyOffice 打开文档时提示下载失败](https://blog.csdn.net/m0_53401243/article/details/133869439)
+
+[配置onlyoffice](https://cloud.seafile.com/published/seafile-manual-cn/deploy/only_office.md)
+
+[令牌错误](https://bbs.seafile.com/t/topic/16165/15)
 
