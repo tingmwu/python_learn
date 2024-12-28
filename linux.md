@@ -383,7 +383,50 @@ aria2c --https-proxy=[ip]:[port]
 
 
 
+- **docker使用代理**
 
+  参考： [docker 设置代理，以及国内加速镜像设置](https://neucrack.com/p/286)
+
+  - 使用镜像站（不一定能用了），编辑/etc/docker/daemon.json添加
+
+  ```bash
+  {
+      "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]
+  }
+  ```
+
+  - docker pull/push设置代理
+
+  ```bash
+  sudo mkdir -p /etc/systemd/system/docker.service.d
+  sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
+  
+  # http-proxy.conf中添加如下
+  [Service]
+  Environment="HTTP_PROXY=http://127.0.0.1:7890"
+  Environment="HTTPS_PROXY=http://127.0.0.1:7890"
+  
+  # 然后重启服务
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker
+  ```
+
+  可以通过sudo systemctl show --property=Environment docker看到设置的环境变量。
+
+  然后docker pull就会使用代理啦！
+
+  这里 HTTP 代理可以通过你的代理软件开出来，如果你的代理软件只能开出来 socks5 代理的话，你可以用 polipo 开一个 http 代理使用。
+
+  
+
+  - 设置 docker 全局代理
+
+    设置方法参考官方文档： https://docs.docker.com/network/proxy/
+
+    注意新版和旧版本(17.07以前)设置方法不一样，比旧版更简单而且不需要重启服务,网上文章基本都是针对旧版本的,可能未来又变化了,所以多看官方文档~
+    以及这种设置方法只对 build 和 run 的容易有用， docker pull 要按照上面的方法设置。
+
+    
 
 
 
